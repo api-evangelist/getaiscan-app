@@ -1,0 +1,208 @@
+generated: '2026-09-19'
+method: probed
+source: https://getaiscan.app/.well-known/agent-card.json
+card:
+  file: a2a/getaiscan-app-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: getaiscan.app
+  note: >-
+    Served from the apex (website) host, which is a Cloudflare-fronted single-page app that answers 200 with
+    its 111,044-byte HTML shell for EVERY unknown path, including a negative-control path that cannot exist.
+    The agent card is nevertheless a served document and not a catch-all artefact: it comes back as
+    application/json (the shell is text/html), it is 11,333 bytes of a distinct body, and it parses as a JSON
+    object with the full AgentCard shape. The API host api.getaiscan.app, which the card names as its A2A
+    endpoint host, returns a real 9-byte text/plain 404 ("Not found") for both /.well-known/agent-card.json
+    and /.well-known/agent.json, and for the same negative-control path — so the card is published on the
+    website host only. The legacy /.well-known/agent.json path on the apex ALSO answers 200 application/json,
+    but its body is NOT an agent card: it is an OpenAPI-flavoured descriptor (openapi pointer, info, servers,
+    one /api/agent/scan path, an x-ai-agent block and a capabilitiesIndex) — saved verbatim to
+    well-known/getaiscan-app-agent.json and not graded here. Ownership is not in question: the card's
+    provider.organization is "AIScan" with provider.url https://getaiscan.app, its skills' x-payment-info
+    endpoints all sit on https://api.getaiscan.app/api/agent/*, the OpenAPI on that host titles itself
+    "AIScan Agent API" with servers[] https://api.getaiscan.app and contact.url https://getaiscan.app, the
+    ai-plugin.json and mcp.json name contact report@getaiscan.app, and the provider's own llms.txt names the
+    same payment recipient wallet (0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7) the card declares.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://getaiscan.app/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 11333
+  body_parses_as: JSON object with AgentCard shape (protocolVersion, name, description, url, preferredTransport, provider, version, documentationUrl, capabilities, defaultInputModes, defaultOutputModes, skills, additionalInterfaces)
+  corroborating_probes:
+  - url: https://getaiscan.app/.well-known/agent.json
+    http_status: 200
+    content_type: application/json
+    note: 4,429 bytes; a legacy-path document that is an OpenAPI-shaped "agent.json" descriptor, not an A2A card. Saved under well-known/.
+  - url: https://api.getaiscan.app/.well-known/agent-card.json
+    http_status: 404
+    note: 9-byte text/plain "Not found". The API host serves no card of its own.
+  - url: https://api.getaiscan.app/.well-known/agent.json
+    http_status: 404
+  - url: https://getaiscan.app/.well-known/getaiscan-app-negative-control-9c41e2ab.json
+    http_status: 200
+    content_type: text/html; charset=utf-8
+    note: The apex is a catch-all for unknown paths (111,044-byte HTML shell). A 200 alone proves nothing on this host; the card is accepted on its application/json content type and parsed AgentCard body.
+  - url: https://api.getaiscan.app/a2a
+    http_status: 404
+    note: GET on the declared JSON-RPC endpoint returns the API host's generic 9-byte 404. The endpoint is POST-only.
+  - url: https://api.getaiscan.app/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"probe"}}'
+    http_status: 200
+    response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32001,"message":"Task not found: AIScan skills are stateless x402 HTTP calls, see message/send"}}'
+    note: A real JSON-RPC responder using the A2A-defined TaskNotFoundError code (-32001); the message text itself says tasks are not kept because skills are stateless HTTP calls.
+  - url: https://api.getaiscan.app/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 200
+    response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32601,"message":"Method not found. Supported: message/send"}}'
+    note: The endpoint is not an MCP server and says so; message/send is the only supported method.
+  - url: https://api.getaiscan.app/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":3,"method":"agent/getAuthenticatedExtendedCard"}'
+    http_status: 200
+    response: '{"jsonrpc":"2.0","id":3,"error":{"code":-32601,"message":"Method not found. Supported: message/send"}}'
+  - url: https://api.getaiscan.app/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":2,"method":"message/send","params":{"message":{"role":"user","parts":[{"kind":"text","text":"check_health https://example.com"}],"messageId":"probe-1"}}}'
+    http_status: 200
+    response_summary: >-
+      A JSON-RPC result of kind "message", role "agent", with one text part: "AIScan: AI visibility auditing.
+      19 pay-per-use skills via x402 on Base (USDC), no API keys. Free catalog: GET
+      https://api.getaiscan.app/api/agent/index . To use a skill: POST https://api.getaiscan.app/api/agent/{skill_id}
+      with x402 payment (PAYMENT-SIGNATURE header ...). Site audits take {"url":...}; visibility skills take
+      {"brand":...,"niche":...}. Your message: "check_health https://example.com". Start with the free catalog
+      to see all 19 skills and prices (0.06-3.50 USDC)."
+    note: >-
+      message/send answers anonymously, does NOT execute the named skill and does NOT return a Task — it
+      returns routing guidance pointing the caller at the REST surface. No payment was made and nothing was
+      purchased. The A2A endpoint is therefore a discovery/handoff surface rather than an execution surface.
+  - url: https://a2aregistry.org
+    note: The card entered the harvest backlog from the a2aregistry.org listing (x-source harvest:a2a-registry). The registry was the lead; the card above was fetched directly from the provider's host.
+agent_card:
+  name: AIScan
+  description: >-
+    AI visibility auditing for websites. 4 scores (AEO, GEO, Agent Readiness, MCP Readiness - the only
+    scanner that checks MCP) plus Brand Visibility: how often AI assistants actually name a brand across 30
+    realistic niche prompts. 18 pay-per-use capabilities via x402 on Base, 0.06-3.50 USDC. No API keys, no
+    signup.
+  url: https://api.getaiscan.app/a2a
+  version: 5.9.1
+  protocol_version: 0.3.0
+  preferred_transport: JSONRPC
+  additional_interfaces:
+  - {transport: JSONRPC, url: 'https://api.getaiscan.app/a2a'}
+  - {transport: HTTP+JSON, url: 'https://api.getaiscan.app'}
+  provider:
+    organization: AIScan
+    url: https://getaiscan.app
+  documentation_url: https://getaiscan.app/llms.txt
+  capabilities:
+    streaming: false
+    push_notifications: false
+  default_input_modes: [application/json]
+  default_output_modes: [application/json]
+  security_schemes: null
+  security: null
+  icon_url: null
+  non_standard_fields:
+    payment_schemes:
+    - protocol: x402
+      x402Version: 2
+      network: eip155:8453
+      asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+      currency: USDC
+      payTo: '0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7'
+      flows: ['exact (EIP-3009 via Coinbase CDP facilitator)', 'direct-transfer (USDC tx hash)']
+    skills_x_payment_info: 'every skill carries x-payment-info {authMode: payment, protocols: [x402], price {amount, currency USDC}, endpoint}'
+  skill_count: 18
+  skills:
+  - {id: check_health, name: Check Health, price_usdc: '0.06', endpoint: 'https://api.getaiscan.app/api/agent/check_health'}
+  - {id: check_llms_txt, name: Check Llms Txt, price_usdc: '0.07', endpoint: 'https://api.getaiscan.app/api/agent/check_llms_txt'}
+  - {id: check_schema, name: Check Schema, price_usdc: '0.07', endpoint: 'https://api.getaiscan.app/api/agent/check_schema'}
+  - {id: check_agent_files, name: Check Agent Files, price_usdc: '0.07', endpoint: 'https://api.getaiscan.app/api/agent/check_agent_files'}
+  - {id: check_mcp, name: Check Mcp, price_usdc: '0.08', endpoint: 'https://api.getaiscan.app/api/agent/check_mcp'}
+  - {id: score_aeo, name: Score Aeo, price_usdc: '0.15', endpoint: 'https://api.getaiscan.app/api/agent/score_aeo'}
+  - {id: score_geo, name: Score Geo, price_usdc: '0.15', endpoint: 'https://api.getaiscan.app/api/agent/score_geo'}
+  - {id: score_agent, name: Score Agent, price_usdc: '0.15', endpoint: 'https://api.getaiscan.app/api/agent/score_agent'}
+  - {id: score_mcp, name: Score Mcp, price_usdc: '0.20', endpoint: 'https://api.getaiscan.app/api/agent/score_mcp'}
+  - {id: generate_llms_txt, name: Generate Llms Txt, price_usdc: '0.30', endpoint: 'https://api.getaiscan.app/api/agent/generate_llms_txt'}
+  - {id: generate_mcp_json, name: Generate Mcp Json, price_usdc: '0.30', endpoint: 'https://api.getaiscan.app/api/agent/generate_mcp_json'}
+  - {id: full_audit, name: Full Audit, price_usdc: '0.35', endpoint: 'https://api.getaiscan.app/api/agent/full_audit'}
+  - {id: fix_pack, name: Fix Pack, price_usdc: '0.55', endpoint: 'https://api.getaiscan.app/api/agent/fix_pack'}
+  - {id: compare, name: Compare, price_usdc: '0.80', endpoint: 'https://api.getaiscan.app/api/agent/compare'}
+  - {id: visibility_fix_pack, name: Visibility Fix Pack, price_usdc: '1.25', endpoint: 'https://api.getaiscan.app/api/agent/visibility_fix_pack'}
+  - {id: full_report, name: Full Report, price_usdc: '1.55', endpoint: 'https://api.getaiscan.app/api/agent/full_report'}
+  - {id: visibility_check, name: Visibility Check, price_usdc: '1.95', endpoint: 'https://api.getaiscan.app/api/agent/visibility_check'}
+  - {id: visibility_vs_competitor, name: Visibility Vs Competitor, price_usdc: '3.50', endpoint: 'https://api.getaiscan.app/api/agent/visibility_vs_competitor'}
+  skill_invocation: >-
+    Skills are not invoked through the A2A endpoint. Each skill's x-payment-info.endpoint is the REST route
+    that fulfils it: POST it with a JSON body ({"url": ...} for site audits; {"brand": ..., "niche": ...} for
+    the visibility skills) and an x402 V2 payment in the PAYMENT-SIGNATURE header. message/send on the A2A
+    endpoint returns text guidance saying exactly this.
+  surface_drift:
+    note: >-
+      The card (version 5.9.1) declares 18 skills; the live free catalog at GET /api/agent/index and the OpenAPI
+      on api.getaiscan.app (version 5.9.4) both list 19 capabilities — generate_skill (0.45 USDC) exists in the
+      REST surface and is missing from the card. The message/send guidance text also says "19 skills". The card
+      is one release behind the REST contract.
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: '0.3.0'
+  preferred_transport: JSONRPC
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields:
+    default_input_modes: true
+    default_output_modes: true
+    preferred_transport: true
+  grade_basis: >-
+    Graded against the A2A 1.0.0 hard checks. capabilities is an OBJECT (pass) declaring streaming false and
+    pushNotifications false. protocolVersion is present at the top level (pass), declared as "0.3.0". skills is an
+    ARRAY (pass) of 18 skills, each with id, name, description and tags. All three optional discriminators are
+    present: preferredTransport (JSONRPC), defaultInputModes and defaultOutputModes (both application/json).
+    This is a 0.3.0-shaped card — top-level url + preferredTransport + protocolVersion, with an
+    additionalInterfaces[] list — and it is internally consistent with that revision.
+  deviations:
+  - field: payment_schemes
+    observed: a top-level array that is not an A2A AgentCard field
+    note: >-
+      The x402 payment terms are declared as a proprietary top-level block rather than through the a2a-x402
+      capabilities.extensions[] mechanism other x402 agents in the catalog use. A conformant A2A reader will
+      ignore it, so the payment requirement is invisible to a strict client until it hits the 402 on the REST
+      route. Recorded as an extension, not a hard failure.
+  - field: skills[].x-payment-info
+    observed: a vendor extension on every skill carrying price and REST endpoint
+    note: Permitted as an x- extension; it is also where the card's real execution contract lives, since the A2A endpoint does not execute skills.
+  - field: skills[].inputModes / outputModes / examples
+    observed: absent on every skill
+    note: Optional per spec; the defaults (application/json) apply.
+  - field: securitySchemes / security
+    observed: absent
+    note: >-
+      Consistent with "No API keys, no signup" — the gate is payment, not authentication. A2A has no standard
+      way to express an x402 requirement without the a2a-x402 extension, which this card does not declare.
+  - field: url / additionalInterfaces
+    observed: the JSONRPC endpoint answers only message/send; tasks/get returns -32001 and no Task is ever created
+    note: >-
+      A2A's task lifecycle (tasks/get, tasks/cancel, streaming) is not implemented; message/send returns a
+      Message with routing guidance rather than executing the skill. The card is conformant in shape; the
+      endpoint behind it is a handoff to the REST surface. The second interface, HTTP+JSON at
+      https://api.getaiscan.app, is the REST API itself, not an A2A HTTP+JSON binding.
+  - field: version
+    observed: card 5.9.1 vs OpenAPI 5.9.4 and 19 REST capabilities vs 18 skills
+    note: See surface_drift above.
+surface_relationship:
+  note: >-
+    AIScan publishes one execution surface and several discovery surfaces over it. Execution: the x402 REST API
+    at https://api.getaiscan.app/api/agent/{capability} (20 operations in the OpenAPI, 19 paid + the free
+    index). Discovery: this A2A card (18 skills), the ai-plugin.json manifest, the /.well-known/mcp.json
+    descriptor (one tool, scan_website, pointing at a REST route — there is no MCP JSON-RPC server, see
+    mcp/getaiscan-app-mcp.yml), the legacy agent.json descriptor, and llms.txt. Every discovery surface resolves
+    to the same REST routes and the same payment wallet.

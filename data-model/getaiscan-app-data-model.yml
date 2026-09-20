@@ -1,0 +1,75 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/getaiscan-app-openapi.json
+docs:
+- https://api.getaiscan.app/api/agent/index
+- https://getaiscan.app/.well-known/mcp.json
+summary: >-
+  The contract has no components.schemas and no $ref links; every request and response schema is inline and
+  shallow (a request object of url / brand / niche / competitor / competitor_brand / weak_spots, a generic
+  response object of capability / url / payment). The model below is therefore derived from the inline schemas,
+  the request-field groupings across the 19 paid operations, the richer outputSchema the MCP descriptor
+  declares for scan_website, and the payment payload observed in the live 402. There are no server-side
+  entities: nothing is created or stored, and no identifier is ever returned that a later call could reference
+  except the weak_spots[] hand-off between visibility_check and visibility_fix_pack.
+id_style:
+  format: none — no resource identifiers are issued
+  hand_offs:
+  - {from: visibility_check, field: weak_spots, to: visibility_fix_pack, note: 'an array returned by every visibility_check response and required verbatim by visibility_fix_pack'}
+  - {from: '402 challenge', field: 'accepts[].payTo / amount / asset / network', to: 'PAYMENT-SIGNATURE on the retry', note: 'the payment binds to the resource URL echoed in resource.url'}
+entities:
+- name: Capability
+  description: A priced, named computation (19 of them) listed by GET /api/agent/index — id, price_usdc, description, endpoint template. The id is the path segment, the OpenAPI operationId and the A2A skill id.
+  schemas: ['inline object under index.responses.200.capabilities']
+  relationships:
+  - {has_one: Price, via: price_usdc}
+  - {belongs_to: Family, via: 'id prefix: check_* / score_* / generate_* / visibility_* / full_* / compare / fix_pack'}
+- name: SiteAuditRequest
+  description: The request body of the 15 site-oriented capabilities — {url} (uri, required); compare adds {competitor} (uri, required).
+  schemas: ['inline requestBody on check_*, score_*, full_audit, generate_*, fix_pack, full_report, compare']
+  relationships:
+  - {belongs_to: Capability, via: path}
+- name: BrandVisibilityRequest
+  description: The request body of the three brand capabilities — {brand, niche} (required); visibility_vs_competitor adds {competitor_brand}; visibility_fix_pack adds {weak_spots[]}.
+  schemas: ['inline requestBody on visibility_check, visibility_vs_competitor, visibility_fix_pack']
+  relationships:
+  - {belongs_to: Capability, via: path}
+  - {has_many: WeakSpot, via: weak_spots}
+- name: Report
+  description: The 200 response of every paid capability. The OpenAPI declares only {capability (required), url, payment}; the MCP descriptor's outputSchema for the scan/full_audit shape adds scanned_at, overall {score 0-100, grade A-F}, scores {aeo, geo, agent, mcp}, total_issues and categories.
+  schemas: ['inline responses.200 on every paid operation', 'mcp descriptor tools[0].outputSchema']
+  relationships:
+  - {has_one: Overall, via: overall}
+  - {has_many: Score, via: scores (aeo, geo, agent, mcp)}
+  - {has_many: Check, via: categories, note: 'shape undeclared ("object")'}
+  - {has_one: PaymentSettlement, via: payment}
+- name: Score
+  description: One of four 0-100 dimensions — AEO (AI search visibility), GEO (citation readiness), Agent Readiness, MCP Readiness — each backed by detailed checks (per the capability descriptions).
+  schemas: ['mcp descriptor outputSchema.scores']
+  relationships:
+  - {belongs_to: Report, via: scores}
+- name: WeakSpot
+  description: An element of weak_spots[] from visibility_check; its inner shape is not declared. Consumed by visibility_fix_pack to generate citable passages, FAQ schema and llms.txt sections.
+  schemas: ['visibility_fix_pack requestBody.weak_spots (array, items undeclared)']
+  relationships:
+  - {belongs_to: BrandVisibilityRequest, via: weak_spots}
+- name: PaymentRequirement
+  description: The x402 V2 challenge on 402 — resource {url, description, mimeType}, accepts[] {scheme exact, network eip155:8453, amount (USDC base units), asset, payTo, maxTimeoutSeconds 300, extra {name, version}}, plus AIScan's price, currency, recipient, instructions, capability and index fields.
+  schemas: ['observed 402 body and PAYMENT-REQUIRED header; not declared in the contract']
+  relationships:
+  - {belongs_to: Capability, via: capability}
+  - {has_one: Wallet, via: payTo}
+- name: PaymentSettlement
+  description: 'The "payment" object on a successful response ("Payment settlement info"); shape undeclared.'
+  schemas: ['responses.200.payment (object)']
+  relationships:
+  - {belongs_to: Report, via: payment}
+- name: Wallet
+  description: 'The provider''s Base address 0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7 that every payment goes to; the payer''s wallet is the only caller identity the API sees.'
+  schemas: []
+  relationships:
+  - {has_many: PaymentRequirement, via: payTo}
+gaps:
+- No components.schemas — nothing is reusable or referenceable, and a generated client will see 19 near-identical anonymous request/response objects.
+- The declared 200 schema (capability / url / payment) omits every field a caller actually wants (scores, checks, fixes); only the MCP descriptor sketches the real report shape, and only for the audit.
+- weak_spots items, categories, payment and the fix-pack / generated-file payloads are all typed as bare object or undeclared.

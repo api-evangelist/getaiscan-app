@@ -1,0 +1,78 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: https://getaiscan.app/
+signals: {}
+summary: >-
+  AIScan publishes no regulatory-posture signal of any kind. The website is a single-page app with no terms of
+  service, privacy policy, refund policy, accessibility statement, subprocessor list, DPA, security page or
+  transparency page — every such path returns the same 111,044-byte HTML shell with HTTP 200 (a catch-all,
+  confirmed by a negative-control path), and the shell's own link list contains no legal link at all. The
+  ai-plugin.json's legal_info_url points at the homepage. The only personal data the human product collects
+  is an email address for report delivery and a payer wallet address; nothing published says how either is
+  handled. An empty signals map is the correct measurement, not a gap in the probe.
+soft_404_control:
+  host: getaiscan.app
+  control_path: /.well-known/getaiscan-app-negative-control-9c41e2ab.json
+  control_status: 200
+  control_bytes: 111044
+  note: Every 200 below on this host is the catch-all shell, recorded as absent. api.getaiscan.app 404s the same paths with a 9-byte body.
+probed_absent:
+- signal: sbom
+  urls:
+  - {url: 'https://getaiscan.app/security/sbom', status: 200, soft_404: true}
+  note: No bill of materials published. Never derived — search only.
+- signal: support_lifetime
+  urls:
+  - {url: 'https://getaiscan.app/changelog', status: 200, soft_404: true}
+  note: No stated support period; no versioning or deprecation page (see lifecycle/).
+- signal: accessibility_conformance
+  urls:
+  - {url: 'https://getaiscan.app/accessibility', status: 200, soft_404: true}
+  note: No conformance report or VPAT.
+- signal: training_data_summary
+  note: The visibility capabilities run prompts "through a frontier AI model" (llms.txt) but the model and any training-data statement are not published; none is expected from a model consumer.
+- signal: ai_transparency
+  note: >-
+    llms.txt and the homepage describe the product as AI-powered auditing and state that Brand Visibility
+    answers come from a frontier AI model — a product description, not a transparency statement about
+    AI-generated content or AI interaction, so nothing is recorded.
+- signal: global_privacy_control
+  note: No privacy policy exists, so no published GPC statement. Not tested by sending a header.
+- signal: data_subject_request
+  urls:
+  - {url: 'https://getaiscan.app/privacy', status: 200, soft_404: true}
+  - {url: 'https://getaiscan.app/privacy/requests', status: 200, soft_404: true}
+  note: No privacy policy, no request channel beyond the general contact report@getaiscan.app.
+- signal: subprocessors
+  urls:
+  - {url: 'https://getaiscan.app/legal/subprocessors', status: 200, soft_404: true}
+  note: >-
+    The surface names Cloudflare (server headers), the Coinbase CDP facilitator (x402 settlement) and an
+    unnamed frontier AI model as parties in the request path, but no subprocessor list, purposes or locations
+    are published, so nothing is recorded as a signal.
+- signal: data_residency
+  urls:
+  - {url: 'https://getaiscan.app/docs/data-residency', status: 200, soft_404: true}
+  note: Cloudflare-fronted with no stated region; no residency choice.
+- signal: incident_notification
+  urls:
+  - {url: 'https://getaiscan.app/legal/dpa', status: 200, soft_404: true}
+  note: No DPA and no breach-notification commitment.
+- signal: age_assurance
+  note: Not documented; the product is sold to website owners and software agents.
+- signal: notice_and_action
+  urls:
+  - {url: 'https://getaiscan.app/legal/report-content', status: 200, soft_404: true}
+- signal: transparency_report
+  urls:
+  - {url: 'https://getaiscan.app/transparency', status: 200, soft_404: true}
+- signal: exit_assistance
+  note: No stored customer data to export — reports are returned in-band (API) or emailed (site); nothing is published about retention of either.
+legal_pages_absent:
+- {url: 'https://getaiscan.app/terms', status: 200, soft_404: true}
+- {url: 'https://getaiscan.app/privacy', status: 200, soft_404: true}
+- {url: 'https://getaiscan.app/security', status: 200, soft_404: true}
+- {url: 'https://getaiscan.app/trust', status: 200, soft_404: true}
+- {url: 'https://getaiscan.app/about', status: 308, note: 'redirects to itself in a loop (308 -> /about); the sitemap lists /about.html, which also 308s'}
+note: No TermsOfService or PrivacyPolicy pointer is emitted because no such page is served.

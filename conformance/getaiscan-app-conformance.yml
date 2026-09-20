@@ -1,0 +1,121 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/getaiscan-app-openapi.json
+docs:
+- https://getaiscan.app/llms.txt
+- https://getaiscan.app/.well-known/agent-card.json
+- https://api.getaiscan.app/api/agent/index
+summary: >-
+  AIScan's conformance profile is the agent-commerce protocol stack: x402 V2 (HTTP 402 with a PAYMENT-REQUIRED
+  header and an accepts[] payload) settled in USDC on Base (CAIP-2 eip155:8453) with EIP-3009 authorizations
+  via the Coinbase CDP facilitator, an A2A 0.3.0 agent card graded conformant, JSON-RPC 2.0 on the A2A endpoint,
+  OpenAPI 3.1.0, an OpenAI plugin manifest, an llms.txt and an AI-crawler-welcoming robots.txt. It declares
+  no OAuth/OIDC, no RFC 9457 problem details, no RFC 9116 security.txt, no RFC 9727 API catalog, no RFC 9728
+  protected-resource metadata and no RFC 8594 sunset signalling, and — despite publishing an MCP descriptor —
+  runs no MCP server. Nothing here is a published compliance program (no SOC 2 / ISO 27001 / GDPR page), so no
+  Compliance pointer is emitted.
+standards:
+- id: x402
+  name: x402 HTTP payment protocol
+  version: '2'
+  conforms: true
+  verification: observed
+  domain_standard_signature: true
+  evidence: >-
+    POST https://api.getaiscan.app/api/agent/check_health with a JSON body and no payment returned HTTP 402
+    with a PAYMENT-REQUIRED header (base64 JSON: x402Version 2, resource, accepts[{scheme exact, network
+    eip155:8453, amount 60000, asset 0x8335…2913, payTo 0x0a28…a1c7, maxTimeoutSeconds 300, extra {name USD
+    Coin, version 2}}]), X-Payment-Version 2 and the X-Payment-* mirrors, and a JSON body naming both flows.
+    The OpenAPI declares a 402 response and an x-payment-info {price {mode fixed, currency USD, amount},
+    protocols [{x402 {}}]} block on all 19 paid operations and a securityScheme named x402 in
+    PAYMENT-SIGNATURE. The agent card's payment_schemes[] and every skill's x-payment-info, the ai-plugin
+    description, the mcp.json authentication block, llms.txt and the API host's response headers
+    (x-payment-accepted x402) all declare the same terms and wallet.
+  note: >-
+    This is the contract-level signature for agent commerce this market has — the payment requirement is
+    machine-readable on every operation, not a prose claim — which is why domain_standard_signature is true.
+    Nothing was paid; the challenge arrives before the money does.
+- id: eip-3009
+  name: EIP-3009 transferWithAuthorization (x402 "exact" scheme)
+  conforms: true
+  verification: declared
+  evidence: agent card payment_schemes[0].flows[0] "exact (EIP-3009 via Coinbase CDP facilitator)"; the 402 challenge's accepts[0].scheme is "exact" with extra {name USD Coin, version 2} (the EIP-712 domain of USDC on Base).
+- id: caip-2
+  name: CAIP-2 chain identifier
+  conforms: true
+  verification: observed
+  evidence: eip155:8453 in the 402 PAYMENT-REQUIRED payload, the X-Payment-Network header, the agent card, the capability index and llms.txt.
+- id: a2a
+  name: Agent2Agent protocol
+  version: '0.3.0'
+  conforms: true
+  verification: observed
+  evidence: >-
+    a2a/getaiscan-app-agent-card.json — protocolVersion "0.3.0", url https://api.getaiscan.app/a2a,
+    preferredTransport JSONRPC, capabilities object, skills[] of 18, defaultInput/OutputModes; POST
+    https://api.getaiscan.app/a2a answered tasks/get with A2A error -32001 Task not found and message/send with
+    a Message result. Graded conformant in a2a/getaiscan-app-a2a.yml.
+  note: The endpoint implements message/send only (no task lifecycle, no streaming) and does not execute skills; execution is the REST surface. The x402 requirement is carried in a proprietary payment_schemes[] block rather than the a2a-x402 capabilities.extensions[] mechanism.
+- id: a2a-x402
+  name: a2a-x402 payment extension
+  conforms: false
+  evidence: The card declares no capabilities.extensions[]; its x402 terms live in a non-standard top-level payment_schemes[] array and per-skill x-payment-info blocks.
+- id: json-rpc-2.0
+  conforms: true
+  verification: observed
+  evidence: 'https://api.getaiscan.app/a2a answers {"jsonrpc":"2.0", ...} with -32601 Method not found ("Supported: message/send") for unimplemented methods and -32001 for tasks/get.'
+- id: openapi-3.1
+  name: OpenAPI Specification 3.1.0
+  conforms: true
+  verification: observed
+  evidence: openapi/getaiscan-app-openapi.json — openapi "3.1.0", 20 paths, every operation with operationId, summary, description, tags (except index, which lacks description and tags) and 200 + 402 responses; no components.schemas and the securityScheme is declared but never applied.
+- id: openai-plugin-manifest
+  name: OpenAI plugin manifest (ai-plugin.json, schema_version v1)
+  conforms: true
+  verification: observed
+  evidence: https://getaiscan.app/.well-known/ai-plugin.json — schema_version v1, name_for_model aiscan, auth {type none}, api {type openapi, url https://getaiscan.app/.well-known/openapi.json}, contact_email report@getaiscan.app.
+- id: llms-txt
+  name: llms.txt
+  conforms: true
+  verification: observed
+  evidence: https://getaiscan.app/llms.txt — H1, blockquote summary, sectioned markdown naming the scores, MCP configuration, x402 terms and every capability with its price. Saved to llms/getaiscan-app-llms.txt.
+- id: mcp
+  name: Model Context Protocol (server)
+  conforms: false
+  evidence: >-
+    /.well-known/mcp.json is a static descriptor (schemaVersion 1.0, mcpVersion 1.0, one tool with inputSchema)
+    but no endpoint answers an MCP tools/list JSON-RPC POST: /a2a returns -32601 "Supported: message/send";
+    /mcp and /api/mcp 404 on the API host and 405 on the apex; mcp.getaiscan.app has no DNS record. See
+    mcp/getaiscan-app-mcp.yml.
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme; /.well-known/oauth-authorization-server is the SPA shell on the apex and 404 on the API host.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration is the SPA shell on the apex and 404 on the API host.
+- id: rfc9728-protected-resource-metadata
+  conforms: false
+  evidence: /.well-known/oauth-protected-resource is the SPA shell on the apex and 404 on api.getaiscan.app.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: 'Errors are plain JSON objects ({"error": ..., "available": [...]} on 404; the x402 body on 402); no application/problem+json, no type/title/status fields.'
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt and /security.txt are the SPA shell on the apex and 404 on the API host.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog is the SPA shell on the apex and 404 on the API host. The API host does advertise its surfaces in custom response headers (x-openapi, x-agent-endpoint, x-mcp-config) instead.
+- id: rfc8594-sunset
+  conforms: false
+  evidence: No Sunset or Deprecation header declared or observed; no deprecated operations.
+- id: apis-json
+  conforms: false
+  evidence: /apis.json, /apis.yml and /.well-known/apis.json are the SPA shell on the apex and 404 on the API host.
+- id: robots-ai-crawler-policy
+  name: robots.txt with explicit AI-crawler groups
+  conforms: true
+  verification: observed
+  evidence: https://getaiscan.app/robots.txt — Allow / for GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-Web, ClaudeBot, Google-Extended, PerplexityBot, Amazonbot, Applebot-Extended, YouBot, Diffbot, FacebookBot, Bytespider, GoogleOther; Sitemap and llms.txt references.
+compliance_program:
+  published: false
+  note: No trust center, certification, SOC 2 / ISO 27001 / GDPR statement, terms of service or privacy policy is served (every legal-looking path returns the SPA shell; probe-security-programs.py found vdp=none trust=none). No Compliance pointer is emitted.

@@ -1,0 +1,63 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the AIScan Agent API
+  version: 1.0.0
+extends: ../openapi/getaiscan-app-openapi.json
+x-generated: '2026-09-19'
+x-method: generated
+x-source: >-
+  Generated from openapi/getaiscan-app-openapi.json (provider-hosted 5.9.4) plus the probed artifacts in this
+  repo. Captures API Evangelist annotations without mutating the provider's contract. Proposed changes are
+  marked as proposals; they do not exist in the provider's spec.
+actions:
+- target: $.info
+  description: Link the provider's other machine-readable surfaces from the contract.
+  update:
+    x-agent-card: https://getaiscan.app/.well-known/agent-card.json
+    x-a2a-endpoint: https://api.getaiscan.app/a2a
+    x-mcp-descriptor: https://getaiscan.app/.well-known/mcp.json
+    x-ai-plugin: https://getaiscan.app/.well-known/ai-plugin.json
+    x-llms-txt: https://getaiscan.app/llms.txt
+    x-capability-index: https://api.getaiscan.app/api/agent/index
+    x-payment:
+      protocol: x402
+      version: 2
+      asset: USDC (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)
+      network: eip155:8453 (Base)
+      pay_to: '0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7'
+      challenge_status: 402
+      challenge_header: PAYMENT-REQUIRED (base64 JSON) plus X-Payment-* mirrors
+      credential_header: PAYMENT-SIGNATURE
+      flows: [exact (EIP-3009 via Coinbase CDP facilitator), direct-transfer (USDC tx hash)]
+- target: $.info
+  description: Add the contact email the provider publishes in ai-plugin.json and mcp.json; the contract carries only a URL.
+  update:
+    contact:
+      name: AIScan
+      url: https://getaiscan.app
+      email: report@getaiscan.app
+- target: $
+  description: Proposal — the contract declares the x402 securityScheme but applies it nowhere. Every paid operation answers 402 until paid, so the requirement should be declared at the top level with index opting out (it already carries security []).
+  update:
+    x-apievangelist-proposed-security:
+    - x402: []
+- target: $
+  description: Declare the one tag the operations use; the document has no top-level tags[].
+  update:
+    tags:
+    - name: AI Visibility
+      description: Pay-per-capability AI-visibility checks, scores, audits, generated fix files and brand-visibility measurements, settled with x402 on Base.
+- target: $.paths['/api/agent/index'].get
+  description: The free catalog carries no tag or description in the provider's document.
+  update:
+    tags: [Catalog]
+    description: Free, unauthenticated catalog of every capability with its USDC price, description and endpoint template, plus the payment terms (x402 V2, USDC on Base) and links to the OpenAPI, llms.txt and MCP descriptor.
+- target: $.paths['/api/agent/scan']
+  description: Proposal — the MCP descriptor and the legacy agent.json both point at /api/agent/scan, which the live API serves as an alias of full_audit (a POST returned the full_audit 402, 0.35 USDC) but which the contract does not declare.
+  update:
+    x-apievangelist-undeclared-route: 'POST /api/agent/scan — live alias of full_audit; declared in /.well-known/mcp.json and /.well-known/agent.json, absent from this contract'
+- target: $.info
+  description: Record that no rate limits or rate-limit headers are published anywhere on the surface (see rate-limits/).
+  update:
+    x-rate-limits: []
+    x-payment-timeout: maxTimeoutSeconds 300 on every x402 challenge

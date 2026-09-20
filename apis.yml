@@ -1,18 +1,110 @@
 aid: getaiscan-app
 name: AIScan
-description: 'AIScan is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  AIScan is an AI-visibility auditing service at getaiscan.app that scans any website in about 60 seconds and
+  returns four 0-100 scores — AEO (AI search visibility), GEO (citation readiness), Agent Readiness and MCP
+  Readiness — from 80+ checks, plus a Brand Visibility measurement of how often AI assistants actually name a
+  brand across 30 realistic niche prompts. Humans buy a full report on the site for 60 USDC; software agents buy
+  19 individual capabilities pay-per-call (0.06-3.50 USDC) through the x402 protocol on Base (eip155:8453) with
+  no API key and no account, via a 20-operation OpenAPI 3.1.0 REST contract served from api.getaiscan.app, an
+  A2A 0.3.0 agent card with 18 skills at /.well-known/agent-card.json, an ai-plugin.json manifest and an MCP
+  discovery descriptor at /.well-known/mcp.json. Every paid route answers an unpaid call with a real HTTP 402
+  x402 V2 challenge; the capability catalog at GET /api/agent/index is free.
+image: https://getaiscan.app/og-image.jpg
 url: https://raw.githubusercontent.com/api-evangelist/getaiscan-app/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
-- Company
-apis: []
+- AI Visibility
+- Website Auditing
+- SEO
+- Answer Engine Optimization
+- Generative Engine Optimization
+- Agents
+- Agent Commerce
+- A2A
+- MCP
+- x402
+- agent-native
+tags_raw:
+- AI visibility
+- Website auditing
+- SEO
+- Answer engine optimization
+- Generative engine optimization
+- Agents
+- Agent commerce
+- A2A
+- MCP
+- x402
+- Agent-native
+apis:
+- aid: getaiscan-app:aiscan-agent-api
+  name: AIScan Agent API
+  description: >-
+    Pay-per-capability REST API for AI-visibility auditing: five cheap HTTP checks (site health and AI-crawler
+    access, llms.txt, Schema.org JSON-LD, agent files, MCP discoverability), four category scores (AEO, GEO,
+    Agent Readiness, MCP Readiness), a full audit, generated llms.txt / mcp.json / SKILL.md fix files, a fix
+    pack, a competitor comparison, a bundled full report, and three Brand Visibility capabilities that measure
+    brand mentions across 30 AI answers. Every capability is POST /api/agent/{capability} with a JSON body and
+    an x402 V2 payment in the PAYMENT-SIGNATURE header (a signed payload settled through the Coinbase CDP
+    facilitator, or a Base USDC transfer tx hash); an unpaid call returns HTTP 402 with the price. GET
+    /api/agent/index is the free catalog. 20 operations across 20 paths, OpenAPI 3.1.0 version 5.9.4 at
+    https://api.getaiscan.app/openapi.json with servers[] https://api.getaiscan.app.
+  image: https://getaiscan.app/og-image.jpg
+  humanURL: https://getaiscan.app/
+  baseURL: https://api.getaiscan.app
+  tags:
+  - AI Visibility
+  - Website Auditing
+  - x402
+  - Agent Commerce
+  - agent-native
+  properties:
+  - type: OpenAPI
+    url: openapi/getaiscan-app-openapi.json
+  - type: OpenAPI
+    name: AIScan Agent API OpenAPI (provider-hosted, api.getaiscan.app, 5.9.4)
+    url: https://api.getaiscan.app/openapi.json
+  - type: OpenAPI
+    name: AIScan Agent API OpenAPI (apex copy, 5.9.0, one operation behind)
+    url: https://getaiscan.app/openapi.json
+  - type: Documentation
+    url: https://getaiscan.app/llms.txt
+  - type: APIReference
+    url: https://api.getaiscan.app/openapi.json
+  - type: Overlay
+    url: overlays/getaiscan-app-openapi-overlay.yaml
+  - type: ToolCrosswalk
+    url: mcp/getaiscan-app-tool-crosswalk.yml
+- aid: getaiscan-app:aiscan-a2a-agent
+  name: AIScan A2A Agent
+  description: >-
+    Agent2Agent (A2A) protocol surface: an agent card served from https://getaiscan.app/.well-known/agent-card.json
+    (protocolVersion 0.3.0, JSONRPC transport, card version 5.9.1) advertising 18 skills — the same pay-per-use
+    capabilities as the REST contract — each carrying an x-payment-info block with its USDC price and the REST
+    endpoint that fulfils it, plus a non-standard payment_schemes[] block declaring x402 V2 on Base. The JSON-RPC
+    endpoint at https://api.getaiscan.app/a2a answers message/send anonymously with routing guidance and rejects
+    every other method (-32601 "Supported: message/send"); the skills themselves are stateless x402 HTTP calls,
+    so an agent uses the card to discover and the REST API to execute.
+  image: https://getaiscan.app/og-image.jpg
+  humanURL: https://getaiscan.app/.well-known/agent-card.json
+  baseURL: https://api.getaiscan.app/a2a
+  tags:
+  - A2A
+  - agent-native
+  - x402
+  properties:
+  - type: AgentCard
+    url: a2a/getaiscan-app-a2a.yml
+  - type: AgentCard
+    name: A2A Agent Card (provider-hosted)
+    url: https://getaiscan.app/.well-known/agent-card.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,3 +113,47 @@ maintainers:
 common:
 - type: Website
   url: https://getaiscan.app/
+- type: Documentation
+  url: https://getaiscan.app/llms.txt
+- type: APIReference
+  url: https://api.getaiscan.app/openapi.json
+- type: Pricing
+  url: https://api.getaiscan.app/api/agent/index
+- type: AgentCard
+  url: a2a/getaiscan-app-a2a.yml
+- type: WellKnown
+  url: well-known/getaiscan-app-well-known.yml
+- type: LLMsTxt
+  url: llms/getaiscan-app-llms.txt
+- type: LLMsTxt
+  name: llms.txt (provider-hosted)
+  url: https://getaiscan.app/llms.txt
+- type: Authentication
+  url: authentication/getaiscan-app-authentication.yml
+- type: Conventions
+  url: conventions/getaiscan-app-conventions.yml
+- type: ErrorCatalog
+  url: errors/getaiscan-app-problem-types.yml
+- type: DataModel
+  url: data-model/getaiscan-app-data-model.yml
+- type: RateLimits
+  url: rate-limits/getaiscan-app-rate-limits.yml
+- type: Plans
+  url: plans/getaiscan-app-plans-pricing.yml
+- type: Conformance
+  url: conformance/getaiscan-app-conformance.yml
+- type: Lifecycle
+  url: lifecycle/getaiscan-app-lifecycle.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/getaiscan-app-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/getaiscan-app-agentic-access.yml
+- type: Packages
+  url: packages/getaiscan-app-packages.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 31
+  pass: local-v3

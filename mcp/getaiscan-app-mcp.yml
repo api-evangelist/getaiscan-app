@@ -1,0 +1,102 @@
+generated: '2026-09-19'
+method: probed
+status: candidate
+status_raw: descriptor published, no server — the provider serves /.well-known/mcp.json but no endpoint answers MCP JSON-RPC
+source: https://getaiscan.app/.well-known/mcp.json
+docs: https://getaiscan.app/llms.txt
+summary: >-
+  AIScan publishes an MCP DISCOVERY DESCRIPTOR, not an MCP server. https://getaiscan.app/.well-known/mcp.json
+  (saved verbatim as mcp/getaiscan-app-mcp-descriptor.json) is a static manifest — schemaVersion 1.0,
+  mcpVersion 1.0, vendor AIScan, capabilities {tools: true, resources: true, prompts: false}, ONE tool
+  (scan_website, with a real inputSchema {url} and an outputSchema of the four scores) and ONE resource
+  (https://api.getaiscan.app/api/agent/scan). Its "endpoints" are REST routes and it names no MCP transport
+  URL. Every plausible endpoint was probed with an MCP tools/list JSON-RPC POST on 2026-09-19 and none is an
+  MCP server: https://api.getaiscan.app/a2a answers JSON-RPC but returns -32601 "Method not found. Supported:
+  message/send"; /mcp and /api/mcp on the API host return the 9-byte 404; /api/agent/mcp returns the API's own
+  404 {"error":"unknown_capability", "available":[...19 capabilities...]}; /mcp and /api/mcp on the apex return
+  405. The provider's llms.txt tells users to add https://getaiscan.app/.well-known/mcp.json as a "custom
+  connector" in Claude Desktop and as a url in .cursor/mcp.json — that URL is a static JSON file, not a
+  Streamable HTTP or SSE endpoint, so those instructions cannot produce a working MCP connection. The
+  descriptor's single tool and resource both resolve to a REST route (/api/agent/scan), which the live API
+  aliases to full_audit (a POST there returned the full_audit 402 challenge, 0.35 USDC). No stdio package
+  exists in any registry searched (see packages/). No MCPServer pointer is emitted: the pointer would assert an
+  agent-callable MCP server the provider does not run. The tool crosswalk (mcp/getaiscan-app-tool-crosswalk.yml)
+  binds the declared tool to its backing OpenAPI operations so the descriptor's intent is not lost.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: probed
+  note: >-
+    mode none because nobody ships a server: the only MCP-shaped artefact is a discovery descriptor whose
+    tool executes over plain HTTP with x402 payment. If AIScan later exposes a Streamable HTTP endpoint the
+    payment gate would be x402 (HTTP 402 challenge, USDC on Base), not OAuth — no OAuth/OIDC metadata is served
+    on either host.
+descriptor:
+  url: https://getaiscan.app/.well-known/mcp.json
+  file: mcp/getaiscan-app-mcp-descriptor.json
+  http_status: 200
+  content_type: application/json
+  bytes: 3917
+  schema_version: '1.0'
+  mcp_version: '1.0'
+  vendor: {name: AIScan, url: 'https://getaiscan.app', contact: report@getaiscan.app, twitter: '@AIScanApp'}
+  capabilities: {tools: true, resources: true, prompts: false}
+  endpoints:
+    scan: https://api.getaiscan.app/api/agent/scan
+    openapi: https://getaiscan.app/openapi.json
+    docs: https://getaiscan.app/llms.txt
+  authentication:
+    type: x402
+    description: 'Pay per capability (0.06-1.55 USDC) on Base. x402 V2: PAYMENT-SIGNATURE signed payload or USDC tx hash.'
+    steps_verbatim:
+    - See capability prices at /api/agent/index, pay in USDC on Base
+    - 'POST https://api.getaiscan.app/api/agent/scan?url=https://example.com'
+    - 'Add header: X-Payment: <your_tx_hash>'
+    - Receive full JSON report
+    note: The descriptor names X-Payment; the current OpenAPI (5.9.4) and the live 402 challenge name PAYMENT-SIGNATURE. The API's CORS allow-list accepts both header spellings.
+  drift: >-
+    The descriptor says "0.06-1.55 USDC" and the resource description says "18 capabilities total"; the live
+    index has 19 capabilities up to 3.50 USDC. The descriptor predates the visibility_* and generate_skill
+    capabilities.
+probes:
+- {url: 'https://api.getaiscan.app/a2a', method: POST, body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}', http_status: 200, response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32601,"message":"Method not found. Supported: message/send"}}', verdict: A2A JSON-RPC responder, not MCP}
+- {url: 'https://api.getaiscan.app/mcp', method: POST, http_status: 404, response: Not found}
+- {url: 'https://api.getaiscan.app/api/mcp', method: POST, http_status: 404, response: Not found}
+- {url: 'https://api.getaiscan.app/api/agent/mcp', method: POST, http_status: 404, response: '{"error":"unknown_capability","available":[...]}', verdict: the capability router's own 404; mcp is not a capability}
+- {url: 'https://getaiscan.app/mcp', method: POST, http_status: 405}
+- {url: 'https://getaiscan.app/api/mcp', method: POST, http_status: 405}
+- {url: 'https://api.getaiscan.app/api/agent/scan', method: POST, body: '{"url":"https://example.com"}', http_status: 402, response_summary: 'x402 V2 PAYMENT-SIGNATURE challenge for resource /api/agent/full_audit, amount 350000 (0.35 USDC)', verdict: the descriptor's scan route is a live alias of full_audit}
+- {host: mcp.getaiscan.app, dns: no A or CNAME record}
+tool_count: 1
+tools:
+- name: scan_website
+  source: descriptor (/.well-known/mcp.json)
+  description: >-
+    Scan any website URL for AI visibility. Returns 4 scored dimensions: AEO (AI Search Visibility), GEO
+    (Citation Readiness), Agent Readiness, and MCP Readiness. Each dimension includes detailed checks and fix
+    instructions. Payment: pay-per-capability via x402 on Base, 0.06-1.55 USDC. Full catalog:
+    https://api.getaiscan.app/api/agent/index
+  input_schema:
+    url: string (uri, required) — the website URL to scan
+  output_schema:
+    url: string
+    scanned_at: string (date-time)
+    overall: {score: 'integer 0-100', grade: 'enum A B C D F'}
+    scores: {aeo: integer, geo: integer, agent: integer, mcp: integer}
+    total_issues: integer
+    categories: object
+  backing_operation: openapi/getaiscan-app-openapi.json#full_audit
+  cost: 0.35 USDC (full_audit price observed in the live 402 on /api/agent/scan)
+resources:
+- uri: https://api.getaiscan.app/api/agent/scan
+  name: AI Visibility Scan
+  mime_type: application/json
+  note: A REST route, not an MCP resource URI scheme; aliases full_audit.
+authorship: provider
+web_mcp: null
+clients_documented:
+- {client: Claude Desktop, instruction_verbatim: 'Settings → Connectors → Add custom connector → https://getaiscan.app/.well-known/mcp.json', works: false, why: 'the URL is a static descriptor, not an MCP endpoint'}
+- {client: Cursor, instruction_verbatim: 'Add to .cursor/mcp.json: {"aiscan": {"url": "https://getaiscan.app/.well-known/mcp.json"}}', works: false, why: same}

@@ -1,0 +1,26 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/getaiscan-app-openapi.json
+docs:
+- https://getaiscan.app/llms.txt
+- https://api.getaiscan.app/api/agent/index
+limit_count: 0
+summary: >-
+  AIScan publishes no rate limits. The OpenAPI declares no 429 response and no rate-limit headers; llms.txt,
+  the capability index, the agent card and the descriptors say nothing about request ceilings; and the live
+  unauthenticated responses (GET / and GET /api/agent/index on api.getaiscan.app, the 402 on check_health)
+  carried no RateLimit-*, X-RateLimit-* or Retry-After header. The only time bound on the surface is the x402
+  challenge's maxTimeoutSeconds 300 — the window to complete a payment — which is a payment deadline, not a
+  rate limit. Because every call is paid, the economic price is the de facto throttle.
+rate_limits: []
+observed:
+- {url: 'GET https://api.getaiscan.app/api/agent/index', status: 200, rate_limit_headers: [], fetched: '2026-09-19'}
+- {url: 'POST https://api.getaiscan.app/api/agent/check_health', status: 402, rate_limit_headers: [], fetched: '2026-09-19'}
+exhaustion:
+  status: undocumented
+  headers: []
+  note: No 429 declared in the contract; behaviour under load is not published.
+payment_deadline:
+  field: accepts[].maxTimeoutSeconds
+  value: 300
+  source: live 402 PAYMENT-REQUIRED payload

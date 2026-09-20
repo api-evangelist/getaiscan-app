@@ -1,0 +1,82 @@
+generated: '2026-09-19'
+method: derived
+source: mcp/getaiscan-app-mcp-descriptor.json + a2a/getaiscan-app-agent-card.json + openapi/getaiscan-app-openapi.json
+summary: >-
+  AIScan has one execution surface (the x402 REST API, 20 operations) and three agent-facing declarations over
+  it: an MCP discovery descriptor declaring one tool, an A2A agent card declaring 18 skills, and an ai-plugin
+  manifest pointing at the OpenAPI. This crosswalk binds every declared tool and skill to the OpenAPI
+  operationId that fulfils it. Confidence is high throughout because the bindings are explicit in the source
+  documents: each A2A skill's x-payment-info.endpoint IS the REST route, and the skill ids equal the
+  operationIds verbatim. The one MCP tool binds to full_audit by live observation (POST /api/agent/scan
+  returned the full_audit 402 challenge). There is no live MCP tools/list to reconcile — no MCP server exists
+  (see mcp/getaiscan-app-mcp.yml).
+surfaces:
+  openapi:
+    file: openapi/getaiscan-app-openapi.json
+    source: https://api.getaiscan.app/openapi.json
+    operations: 20
+    gated: false — the document is public; every paid operation answers HTTP 402 x402 until paid
+  mcp:
+    descriptor: https://getaiscan.app/.well-known/mcp.json
+    server: null
+    tools_list: not available — no MCP endpoint exists; the descriptor's static tools[] is the only tool list
+    gated: n/a
+  a2a:
+    card: https://getaiscan.app/.well-known/agent-card.json
+    endpoint: https://api.getaiscan.app/a2a
+    skills: 18
+    note: message/send returns routing guidance and does not execute skills; skills execute over REST.
+  graphql: null
+crosswalk:
+- tool: scan_website
+  surface: mcp-descriptor
+  category: audit
+  rest: [full_audit]
+  binding: rest
+  confidence: high
+  note: >-
+    The descriptor points the tool at https://api.getaiscan.app/api/agent/scan; a live POST to that route
+    returned the x402 challenge for resource /api/agent/full_audit (0.35 USDC). The tool's inputSchema {url}
+    equals full_audit's requestBody schema; its outputSchema (overall score/grade, four scores, categories) is
+    richer than the generic response schema the OpenAPI declares for full_audit.
+- {tool: check_health, surface: a2a-skill, category: check, rest: [check_health], binding: rest, confidence: high}
+- {tool: check_llms_txt, surface: a2a-skill, category: check, rest: [check_llms_txt], binding: rest, confidence: high}
+- {tool: check_schema, surface: a2a-skill, category: check, rest: [check_schema], binding: rest, confidence: high}
+- {tool: check_agent_files, surface: a2a-skill, category: check, rest: [check_agent_files], binding: rest, confidence: high}
+- {tool: check_mcp, surface: a2a-skill, category: check, rest: [check_mcp], binding: rest, confidence: high}
+- {tool: score_aeo, surface: a2a-skill, category: score, rest: [score_aeo], binding: rest, confidence: high}
+- {tool: score_geo, surface: a2a-skill, category: score, rest: [score_geo], binding: rest, confidence: high}
+- {tool: score_agent, surface: a2a-skill, category: score, rest: [score_agent], binding: rest, confidence: high}
+- {tool: score_mcp, surface: a2a-skill, category: score, rest: [score_mcp], binding: rest, confidence: high}
+- {tool: full_audit, surface: a2a-skill, category: audit, rest: [full_audit], binding: rest, confidence: high}
+- {tool: generate_llms_txt, surface: a2a-skill, category: generate, rest: [generate_llms_txt], binding: rest, confidence: high}
+- {tool: generate_mcp_json, surface: a2a-skill, category: generate, rest: [generate_mcp_json], binding: rest, confidence: high}
+- {tool: fix_pack, surface: a2a-skill, category: fix, rest: [fix_pack], binding: rest, confidence: high}
+- {tool: compare, surface: a2a-skill, category: compare, rest: [compare], binding: rest, confidence: high, note: 'body needs url + competitor'}
+- {tool: full_report, surface: a2a-skill, category: bundle, rest: [full_report], binding: rest, confidence: high}
+- {tool: visibility_check, surface: a2a-skill, category: brand-visibility, rest: [visibility_check], binding: rest, confidence: high, note: 'body needs brand + niche; no url'}
+- {tool: visibility_vs_competitor, surface: a2a-skill, category: brand-visibility, rest: [visibility_vs_competitor], binding: rest, confidence: high, note: 'body needs brand + competitor_brand + niche'}
+- {tool: visibility_fix_pack, surface: a2a-skill, category: brand-visibility, rest: [visibility_fix_pack], binding: rest, confidence: high, note: 'body needs brand + niche + weak_spots[] from a prior visibility_check'}
+mcp_only: []
+a2a_only: []
+rest_only:
+- operationId: generate_skill
+  method: POST
+  path: /api/agent/generate_skill
+  price_usdc: '0.45'
+  reason: Added in OpenAPI 5.9.4 and present in the live index; the agent card (5.9.1) and the descriptor predate it.
+- operationId: index
+  method: GET
+  path: /api/agent/index
+  price_usdc: free
+  reason: The free catalog; a discovery call rather than a capability, so no skill or tool wraps it.
+coverage:
+  mcp_tools_declared: 1
+  mcp_tools_bound: 1
+  a2a_skills_declared: 18
+  a2a_skills_bound: 18
+  mcp_only: 0
+  a2a_only: 0
+  rest_operations_total: 20
+  rest_operations_with_a_tool_or_skill: 18
+  rest_only: 2

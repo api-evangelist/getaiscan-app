@@ -1,0 +1,55 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/getaiscan-app-openapi.json
+derived_from: openapi/getaiscan-app-openapi.json
+docs:
+- https://getaiscan.app/llms.txt
+- https://getaiscan.app/sitemap.xml
+versioning:
+  scheme: unversioned paths; version carried in each document and in the Worker banner
+  current_version: 5.9.4 (OpenAPI on api.getaiscan.app and the Worker banner "AIScan Worker v5.9.4 OK" at GET /) / 5.9.1 (agent card) / 5.9.0 (OpenAPI copy on getaiscan.app and /.well-known/openapi.json) / 1.0.0 (legacy agent.json descriptor)
+  spec_url: https://api.getaiscan.app/openapi.json
+  base_url: https://api.getaiscan.app
+  policy_published: false
+  note: >-
+    Paths carry no version segment (/api/agent/{capability}). Four published surfaces carry four different
+    version numbers, and the drift is material: the apex OpenAPI (5.9.0) lacks generate_skill, the agent card
+    (5.9.1) lacks the same skill, the ai-plugin.json still describes "15 pay-per-capability endpoints (0.06-1.55
+    USDC)", the mcp.json says "0.06-1.55 USDC" and "18 capabilities total", while the live index and the
+    api-host OpenAPI (5.9.4) have 19 capabilities up to 3.50 USDC. The api-host OpenAPI and the free index are
+    the surfaces that track the running Worker; the apex copies lag.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations: []
+  documented_retirements: []
+  note: >-
+    Zero operations carry deprecated: true. No deprecation or versioning policy page exists (/changelog, /docs
+    and every other unknown path on the apex return the SPA shell; the API host 404s them). The legacy
+    agent.json descriptor names the header X-Payment where the current contract names PAYMENT-SIGNATURE — an
+    unannounced rename the CORS allow-list still tolerates. No Deprecation pointer is emitted.
+status_page:
+  url: null
+  probed:
+  - {url: 'https://getaiscan.app/status', status: 200, note: SPA shell (catch-all), not a status page}
+  - {host: status.getaiscan.app, dns: no record}
+  live_signal:
+    url: https://api.getaiscan.app/
+    status: 200
+    observed: AIScan Worker v5.9.4 OK
+    note: A health banner from the Cloudflare Worker, not an incident history or uptime commitment. No StatusPage pointer is emitted.
+sla:
+  published: false
+  note: No uptime target, support commitment or refund policy is published anywhere on the surface; the only stated time bound is the x402 challenge's maxTimeoutSeconds 300 for completing a payment.
+changelog:
+  published: false
+  probed:
+  - {url: 'https://getaiscan.app/changelog', status: 200, note: SPA shell (catch-all)}
+  dated_signals:
+  - {date: '2026-06-12', what: 'sitemap.xml lastmod for /, /about.html and /llms.txt'}
+  - {date: '2026-09-19', what: 'Worker banner v5.9.4; OpenAPI 5.9.4 adds generate_skill over the 5.9.0 apex copy'}
+  - {what: 'llms.txt "About" says AIScan was founded in 2026'}
+  - {what: 'homepage says "70+ on-chain payments processed" and that an AISC token is "launching soon on Base" with a 35% discount for paying in it'}
+  note: No changelog artifact is written; the dated signals above are the only change history the provider publishes.

@@ -1,0 +1,75 @@
+# AIScan - The AI Visibility Standard
+# https://getaiscan.app | report@getaiscan.app | @AIScanApp
+
+> AIScan audits any website for AI visibility in under 60 seconds. 4 scores, 80+ checks. The only scanner with MCP Readiness.
+
+## About
+
+AIScan was founded in 2026 to solve a critical problem: less than 5% of websites are properly optimized for AI systems. Over 60% of Google searches now end without a click as AI answers them directly (SparkToro, 2024). AIScan provides actionable audits across 4 dimensions with fix instructions for every issue.
+
+Author: AIScan Team
+Contact: report@getaiscan.app
+Twitter: https://x.com/AIScanApp
+URL: https://getaiscan.app
+
+## Statistics (sourced)
+
+- 60% of Google searches end without a click in 2025 (SparkToro, 2024)
+- 1B+ weekly ChatGPT queries in 2025 (OpenAI, 2025)
+- Less than 5% of websites are properly optimized for AI visibility (AIScan internal research, 2026)
+- Less than 1% of websites have MCP Readiness implementation (AIScan audit data, 2026)
+
+## Scores
+
+- AEO (AI Search Visibility) — schema markup, llms.txt, robots.txt, FAQ schema, Open Graph, sitemap
+- GEO (Citation Readiness) — citable passages, statistics with sources, brand narrative, sameAs links, author attribution
+- Agent Readiness — OpenAPI spec, x402 payments, structured actions, contact schema, developer docs
+- MCP Readiness — mcp.json, ai-plugin.json, agent.json, tool descriptions, protocol version
+
+## Brand Visibility (new)
+
+Brand Visibility measures how often AI assistants actually name a brand. AIScan generates 30 realistic niche prompts, runs each through a frontier AI model, then counts every brand mentioned. The report includes mention rate, share of voice ranking against all competitors, sample mentions, a plain-words summary, 5 concrete recommendations, and a ready-to-deploy fix pack (citable passages, FAQ schema, llms.txt sections for the 3 weakest areas). 15 USDC on-site, 1.95 USDC for agents via x402.
+
+## MCP Configuration
+
+MCP protocol version: 1.0
+MCP endpoint: https://getaiscan.app/.well-known/mcp.json
+Tool: scan_website — scan any URL for AI visibility
+Resource: /api/agent/full_audit (18 capabilities total, see /api/agent/index)
+Authentication: x402 protocol, 0.06-1.55 USDC per capability on Base
+
+Connect in Claude Desktop:
+Settings → Connectors → Add custom connector → https://getaiscan.app/.well-known/mcp.json
+
+Connect in Cursor:
+Add to .cursor/mcp.json: {"aiscan": {"url": "https://getaiscan.app/.well-known/mcp.json"}}
+
+## For AI Agents - x402 Protocol
+
+Capability catalog (free): GET https://api.getaiscan.app/api/agent/index
+OpenAPI spec: https://api.getaiscan.app/openapi.json
+Payment: x402 V2 on Base (eip155:8453), USDC
+Recipient: 0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7
+Flows: signed PAYMENT-SIGNATURE payload (settled via Coinbase CDP facilitator) or direct USDC transfer + tx hash
+
+18 pay-per-use capabilities:
+- check_health 0.06 USDC - site availability, robots.txt, AI crawler access
+- check_llms_txt 0.07 USDC - llms.txt existence and quality
+- check_schema 0.07 USDC - Schema.org JSON-LD detection
+- check_agent_files 0.07 USDC - openapi.json, ai-plugin.json, x402 detection
+- check_mcp 0.08 USDC - MCP discoverability check
+- score_aeo / score_geo / score_agent 0.15 USDC - full category scores 0-100
+- score_mcp 0.20 USDC - MCP Readiness score, unique to AIScan
+- generate_llms_txt / generate_mcp_json 0.30 USDC - ready-to-deploy files
+- full_audit 0.35 USDC - all 4 scores, 80+ checks
+- fix_pack 0.55 USDC - copy-paste fixes for every failed check
+- compare 0.80 USDC - gap analysis vs a competitor
+- full_report 1.55 USDC - audit + fixes + generated files
+- visibility_check 1.95 USDC - brand mention rate across 30 AI answers, share of voice (params: brand + niche)
+- visibility_vs_competitor 3.50 USDC - two brands head-to-head on the same 30 AI answers (params: brand + competitor_brand + niche)
+- visibility_fix_pack 1.25 USDC - ready-to-deploy fix materials for weak visibility areas: citable passages, FAQ schema, llms.txt sections (params: brand + niche + weak_spots from a prior visibility_check)
+
+Usage: POST /api/agent/{capability} with JSON body {"url": "https://example.com"} (visibility capabilities take {"brand": "...", "niche": "..."} instead)
+Listed on x402scan marketplace.
+
+No API key. No subscription. Pay per capability.

@@ -1,0 +1,53 @@
+generated: '2026-09-19'
+method: probed
+source: https://api.getaiscan.app/api/agent/index
+docs:
+- https://getaiscan.app/
+- https://getaiscan.app/llms.txt
+plan_count: 20
+currency: USDC
+model: pay-per-capability in USDC on Base via x402 for agents; a single pay-per-report price for humans; no subscription, no account, no card
+summary: >-
+  AIScan publishes no tiers. Every API capability is priced per call in USDC (0.06-3.50) and paid through x402
+  at the moment of use; prices below were read from the machine-readable catalog at GET /api/agent/index on
+  2026-09-19 (price_usdc per capability) and match the x-payment-info blocks in the OpenAPI, the agent card and
+  the live 402 challenges (check_health 60000 base units = 0.06; scan/full_audit 350000 = 0.35). The human
+  product on the site is a full report for 60 USDC (or the ETH equivalent) delivered by email, with a free
+  in-browser preview scan and a free brand-visibility preview; llms.txt prices the human Brand Visibility report
+  at 15 USDC on-site. The homepage also says an AISC token is "launching soon on Base" and that paying with it
+  will give a 35% discount — a stated intention, not a live price.
+plans:
+- {id: check_health, name: Check Health, price: 0.06, currency: USDC, period: per call, unit: 1 site URL}
+- {id: check_llms_txt, name: Check llms.txt, price: 0.07, currency: USDC, period: per call, unit: 1 site URL}
+- {id: check_schema, name: Check Schema.org, price: 0.07, currency: USDC, period: per call, unit: 1 site URL}
+- {id: check_agent_files, name: Check Agent Files, price: 0.07, currency: USDC, period: per call, unit: 1 site URL}
+- {id: check_mcp, name: Check MCP discoverability, price: 0.08, currency: USDC, period: per call, unit: 1 site URL}
+- {id: score_aeo, name: AEO score, price: 0.15, currency: USDC, period: per call, unit: 1 site URL}
+- {id: score_geo, name: GEO score, price: 0.15, currency: USDC, period: per call, unit: 1 site URL}
+- {id: score_agent, name: Agent Readiness score, price: 0.15, currency: USDC, period: per call, unit: 1 site URL}
+- {id: score_mcp, name: MCP Readiness score, price: 0.20, currency: USDC, period: per call, unit: 1 site URL}
+- {id: generate_llms_txt, name: Generate llms.txt, price: 0.30, currency: USDC, period: per call, unit: 1 site URL}
+- {id: generate_mcp_json, name: Generate mcp.json + agent.json, price: 0.30, currency: USDC, period: per call, unit: 1 site URL}
+- {id: full_audit, name: Full audit (all 4 scores, 80+ checks), price: 0.35, currency: USDC, period: per call, unit: 1 site URL}
+- {id: generate_skill, name: Generate SKILL.md fix file, price: 0.45, currency: USDC, period: per call, unit: 1 site URL, note: 'in the live index and OpenAPI 5.9.4; not yet in the agent card, apex OpenAPI or llms.txt'}
+- {id: fix_pack, name: Fix pack, price: 0.55, currency: USDC, period: per call, unit: 1 site URL}
+- {id: compare, name: Competitor comparison, price: 0.80, currency: USDC, period: per call, unit: 1 site URL + 1 competitor URL}
+- {id: visibility_fix_pack, name: Brand visibility fix pack, price: 1.25, currency: USDC, period: per call, unit: 1 brand + niche + weak_spots}
+- {id: full_report, name: Full report bundle (audit + fix pack + generated files), price: 1.55, currency: USDC, period: per call, unit: 1 site URL}
+- {id: visibility_check, name: Brand visibility check (30 AI prompts), price: 1.95, currency: USDC, period: per call, unit: 1 brand + niche}
+- {id: visibility_vs_competitor, name: Brand visibility head-to-head, price: 3.50, currency: USDC, period: per call, unit: 2 brands + niche}
+- id: human-full-report
+  name: Full Report (website, for humans)
+  price: 60
+  currency: USDC
+  period: per report
+  unit: 1 site
+  channel: getaiscan.app checkout — pay with wallet, or QR/manual USDC or ETH transfer to the same Base address; report delivered by email
+  included: [80+ checks, fix-by-fix instructions, delivered to your email]
+  source: https://getaiscan.app/ ("free scan · full report 60 USDC")
+  note: 'llms.txt adds a human Brand Visibility report at "15 USDC on-site"; the price was not found on the rendered homepage text and is recorded from llms.txt only.'
+free_tier:
+  api: GET /api/agent/index — the catalog, no payment
+  website: free in-browser site scan preview and brand-visibility preview
+stated_intentions:
+- 'AISC token: "Pay with AISC token - get 35% discount. Token launching soon on Base" (homepage) — not live'

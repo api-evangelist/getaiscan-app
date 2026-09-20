@@ -1,0 +1,28 @@
+generated: '2026-09-19'
+method: searched
+source: registry searches 2026-09-19
+package_count: 0
+packages: []
+searched:
+- {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=getaiscan', result: 0 packages}
+- {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=aiscan', result: '6 packages, none first-party — see disambiguation'}
+- {registry: pypi, query: 'https://pypi.org/pypi/getaiscan/json', status: 404}
+- {registry: pypi, query: 'https://pypi.org/pypi/aiscan/json', status: 200, result: 'IQTLabs/aiscan, "Scan AI models for problems" — an unrelated project'}
+- {registry: pypi, query: 'https://pypi.org/pypi/aiscan-mcp/json', status: 404}
+- {registry: github, query: 'https://api.github.com/search/repositories?q=getaiscan+OR+"getaiscan.app"', result: 0 repositories}
+- {registry: github, query: 'https://api.github.com/search/repositories?q=aiscan+x402', result: 0 repositories}
+disambiguation:
+- package: aiscan-cli / @aiscan/cli (npm, 1.0.3, 2026-09-02)
+  homepage: https://aiscan.site/docs/cli
+  author: 'AIScan <https://aiscan.site>'
+  repository: https://github.com/Asif2BD/aiscan-cli
+  verdict: NOT this provider
+  why: >-
+    A same-named product ("grade any website for AI-agent readiness") at a different domain (aiscan.site) by a
+    different author, with its own REST API and scoring model (five dimensions, 16+ checks). getaiscan.app
+    never references it, and it never references getaiscan.app. Two companies share the AIScan name in the
+    same niche; this repo is the getaiscan.app one (slug follows the domain).
+note: >-
+  AIScan (getaiscan.app) publishes no client library, CLI or SDK in any registry searched, has no GitHub
+  organization on its surface, and documents no install path — the documented way in is raw HTTP against the
+  OpenAPI with an x402 wallet, the A2A card, or the ai-plugin manifest. No SDKs or CLI pointer is emitted.

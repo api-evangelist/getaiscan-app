@@ -1,0 +1,205 @@
+generated: '2026-09-19'
+method: probed
+source: >-
+  Live GET probes of the named /.well-known/* path list on getaiscan.app (website host) and api.getaiscan.app
+  (OpenAPI servers[] host, A2A endpoint host), 2026-09-19. Every row below is a request that was actually
+  issued; every status is the one returned. www.getaiscan.app, docs.getaiscan.app, mcp.getaiscan.app and
+  status.getaiscan.app have no DNS records (dig returned nothing) and are not hosts.
+summary:
+  hosts_probed: 2
+  paths_probed: 44
+  documents_served: 6
+  hit_count: 6
+  path_echo_control: n/a
+  soft_404_control:
+    getaiscan.app: failed — the apex is an SPA catch-all that answers 200 text/html with its 111,044-byte shell for every unknown path, including the negative-control path. Only responses whose content type is NOT text/html and whose body is a distinct, parsing document are recorded as served.
+    api.getaiscan.app: passed — unknown paths return a real 9-byte text/plain 404 ("Not found"), and so does the negative-control path.
+  note: >-
+    AIScan serves six real well-known-surface documents, all on the website host: an A2A agent card
+    (/.well-known/agent-card.json), a legacy-path agent.json that is an OpenAPI-shaped descriptor rather than a
+    card, an OpenAI-style ai-plugin.json, an MCP discovery descriptor (/.well-known/mcp.json — a static
+    manifest, not a server), an OpenAPI copy at /.well-known/openapi.json, and the API host serves the newer
+    OpenAPI at the same well-known path. It serves NONE of the documents the well_known_catalog and
+    consent_identity checks credit: no RFC 9116 security.txt, no RFC 9727 API catalog, no RFC 8414 / OIDC
+    authorization-server metadata, no RFC 9728 protected-resource metadata, no AAuth resource document, no
+    APIs.json, no UCP/ACP manifest. Because the apex catch-all answers 200 for all of those paths, each such
+    row below records the 200 with soft_404: true and NO file — a recorded absence, not a presence. There is no
+    MCP server host: /.well-known/mcp.json is a descriptor and no endpoint answers MCP tools/list (see
+    mcp/getaiscan-app-mcp.yml), so the RFC 9728 protected-resource probe on the MCP resource host is the
+    api.getaiscan.app row below (404).
+hosts:
+- host: getaiscan.app
+  role: Website host (SPA catch-all) — serves the agent card, ai-plugin, mcp descriptor, llms.txt and an OpenAPI copy
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    bytes: 11333
+    file: getaiscan-app-agent-card.json
+    standard: A2A Agent Card (protocolVersion 0.3.0)
+    note: Also saved verbatim under a2a/ and graded conformant in a2a/getaiscan-app-a2a.yml.
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    bytes: 4429
+    file: getaiscan-app-agent.json
+    standard: non-standard — an OpenAPI-shaped "agent.json" descriptor (openapi pointer, info, servers, one /api/agent/scan path, x-ai-agent block, capabilitiesIndex), NOT an A2A card
+    note: The legacy pre-0.3 agent-card path is occupied by a different document type. Its info.version is 1.0.0 and it names the header X-Payment where the current spec names PAYMENT-SIGNATURE.
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    content_type: application/json
+    bytes: 1176
+    file: getaiscan-app-ai-plugin.json
+    standard: OpenAI plugin manifest (schema_version v1)
+    note: auth.type none; api.url https://getaiscan.app/.well-known/openapi.json; contact_email report@getaiscan.app; description_for_model still says "15 pay-per-capability endpoints ... 0.06-1.55 USDC" against a live catalog of 19 capabilities up to 3.50 USDC.
+  - path: /.well-known/mcp.json
+    status: 200
+    content_type: application/json
+    bytes: 3917
+    file: getaiscan-app-mcp.json
+    standard: MCP discovery descriptor (schemaVersion 1.0, mcpVersion 1.0) — vendor, capabilities, one tool with inputSchema/outputSchema, one resource, endpoints, authentication
+    note: A static manifest. It names no MCP transport endpoint; its endpoints are REST routes. No host answers MCP tools/list — see mcp/getaiscan-app-mcp.yml.
+  - path: /.well-known/openapi.json
+    status: 200
+    content_type: application/json
+    bytes: 45545
+    file: ../openapi/_original/getaiscan-app-openapi-apex-5.9.0.json
+    standard: OpenAPI 3.1.0
+    note: Byte-identical to https://getaiscan.app/openapi.json — info.version 5.9.0, 19 paths. The API host serves 5.9.4 with 20 paths (generate_skill added); that newer document is the one saved as openapi/getaiscan-app-openapi.json.
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 111044
+    soft_404: true
+    note: SPA shell, not a security.txt. Recorded as absent. /security.txt at the root behaves the same.
+  - path: /security.txt
+    status: 200
+    soft_404: true
+  - path: /.well-known/openid-configuration
+    status: 200
+    soft_404: true
+    note: SPA shell (text/html, 111,044 bytes). No OIDC discovery.
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    soft_404: true
+    note: SPA shell. No RFC 8414 metadata.
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    soft_404: true
+    note: SPA shell. No RFC 9728 metadata.
+  - path: /.well-known/api-catalog
+    status: 200
+    soft_404: true
+    note: SPA shell. No RFC 9727 linkset.
+  - path: /.well-known/api-catalog.json
+    status: 200
+    soft_404: true
+  - path: /.well-known/ucp.json
+    status: 200
+    soft_404: true
+  - path: /.well-known/acp.json
+    status: 200
+    soft_404: true
+  - path: /.well-known/aauth-resource.json
+    status: 200
+    soft_404: true
+  - path: /.well-known/apis.json
+    status: 200
+    soft_404: true
+  - path: /apis.json
+    status: 200
+    soft_404: true
+  - path: /apis.yml
+    status: 200
+    soft_404: true
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain; charset=utf-8
+    bytes: 4339
+    file: ../llms/getaiscan-app-llms.txt
+    standard: llms.txt
+    note: >-
+      Provider-authored ("# AIScan - The AI Visibility Standard", contact report@getaiscan.app). Fetched
+      thirteen times on 2026-09-19 across four User-Agents (curl, Chrome, ClaudeBot, python-requests) and
+      byte-identical every time. The agent card's documentationUrl and the free capability index's docs field
+      both point at this path; it is the closest thing AIScan publishes to human documentation.
+  - path: /robots.txt
+    status: 200
+    content_type: text/plain
+    bytes: 670
+    note: Allow / for *, with explicit Allow groups for GPTBot, ChatGPT-User, CCBot, anthropic-ai, Claude-Web, ClaudeBot, Google-Extended, PerplexityBot, Amazonbot, Applebot-Extended, YouBot, Diffbot, FacebookBot, Bytespider, GoogleOther; Sitemap and llms.txt comments. Not saved as an artifact.
+  - path: /.well-known/getaiscan-app-negative-control-9c41e2ab.json
+    status: 200
+    content_type: text/html; charset=utf-8
+    bytes: 111044
+    control: negative
+    note: A path that cannot exist answers 200 with the SPA shell. This host is a catch-all; a 200 here is never evidence by itself.
+- host: api.getaiscan.app
+  role: API host — OpenAPI servers[], every paid capability route, the A2A JSON-RPC endpoint; Cloudflare Worker ("AIScan Worker v5.9.4 OK" at /)
+  documents:
+  - path: /.well-known/openapi.json
+    status: 200
+    content_type: application/json
+    bytes: 24365
+    file: ../openapi/getaiscan-app-openapi.json
+    standard: OpenAPI 3.1.0
+    note: Byte-identical to https://api.getaiscan.app/openapi.json — info.version 5.9.4, 20 paths. The primary contract for this provider.
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: This host is the resource server for every paid route and the A2A endpoint; no RFC 9728 metadata is served for it. There is no separate MCP host.
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/api-catalog.json
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /.well-known/ucp.json
+    status: 404
+  - path: /.well-known/acp.json
+    status: 404
+  - path: /.well-known/aauth-resource.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /apis.json
+    status: 404
+  - path: /apis.yml
+    status: 404
+  - path: /llms.txt
+    status: 404
+  - path: /.well-known/getaiscan-app-negative-control-9c41e2ab.json
+    status: 404
+    control: negative
+    note: A path that cannot exist 404s (9-byte text/plain "Not found"), so the 200s on this host are served documents.
+response_headers_of_note:
+  host: api.getaiscan.app
+  observed_on: GET https://api.getaiscan.app/
+  headers:
+    x-agent-endpoint: https://api.getaiscan.app/api/agent/index
+    x-mcp-config: https://getaiscan.app/.well-known/mcp.json
+    x-openapi: https://api.getaiscan.app/openapi.json
+    x-payment-accepted: x402
+    x-payment-amount: 0.06-3.50
+    x-payment-asset: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'
+    x-payment-currency: USDC
+    x-payment-network: eip155:8453
+    x-payment-recipient: '0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7'
+    x-payment-version: '1'
+  note: >-
+    The API host advertises its own discovery surfaces and payment terms in response headers on every response,
+    which is a discovery mechanism the well-known probe list does not cover. Recorded here because it is how an
+    agent that lands on the bare host finds the catalog, the OpenAPI and the MCP descriptor.

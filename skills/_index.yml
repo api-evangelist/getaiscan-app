@@ -1,0 +1,26 @@
+generated: '2026-09-19'
+method: generated
+source: >-
+  openapi/getaiscan-app-openapi.json (all operationIds verified against the 5.9.4 spec) plus the free
+  capability index, llms.txt, the agent card and the live 402 challenge. AIScan publishes no skills, AGENTS.md
+  or SKILL.md of its own (probed 2026-09-19); it SELLS a generated SKILL.md to its customers via the
+  generate_skill capability, which is a product, not a published skill for calling AIScan.
+skills:
+- file: getaiscan-app-audit-and-fix-site.md
+  name: getaiscan-app-audit-and-fix-site
+  method: generated
+  description: Triage with the cheap checks, run the full four-score audit, then buy the fix pack or SKILL.md fix file, paying each step with x402 on Base.
+  operations: 10
+  operation_ids: [index, check_health, check_llms_txt, check_schema, check_agent_files, check_mcp, full_audit, fix_pack, generate_skill, full_report]
+- file: getaiscan-app-compare-competitors.md
+  name: getaiscan-app-compare-competitors
+  method: generated
+  description: Gap analysis of one website against a competitor's as a single paid x402 call.
+  operations: 3
+  operation_ids: [index, compare, full_audit]
+- file: getaiscan-app-measure-brand-visibility.md
+  name: getaiscan-app-measure-brand-visibility
+  method: generated
+  description: Measure brand mentions across 30 AI answers, fix the weak spots, optionally run a head-to-head against a competitor brand.
+  operations: 4
+  operation_ids: [index, visibility_check, visibility_fix_pack, visibility_vs_competitor]

@@ -1,0 +1,71 @@
+generated: '2026-09-19'
+method: derived
+source: openapi/getaiscan-app-openapi.json
+probed: true
+docs: https://getaiscan.app/llms.txt
+format: json-error-object
+envelope:
+  media_type: application/json
+  fields:
+  - name: error
+    description: Short machine string naming the failure ("unknown_capability" on 404; "PAYMENT-SIGNATURE header is required" on 402).
+  - name: available
+    description: On the capability router's 404, the list of valid capability ids.
+  - name: x402Version / resource / accepts / instructions / price / currency / recipient / capability / index
+    description: On 402, the x402 V2 PaymentRequired payload plus AIScan's human-readable instructions and a pointer back to the free index.
+  observed:
+  - {status: 402, url: 'POST https://api.getaiscan.app/api/agent/check_health', body_head: '{"x402Version":2,"error":"PAYMENT-SIGNATURE header is required","resource":{"url":"https://api.getaiscan.app/api/agent/check_health?url=https%3A%2F%2Fexample.com","description":"AIScan check_health: ...","mimeType":"application/json"},"accepts":[{"scheme":"exact","network":"base","maxAmountRequired":"60000","amount":"60000",...}],"extensions":{},"price":0.06,"currency":"USDC","recipient":"0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7","instructions":"Pay 0.06 USDC: ...","capability":"check_health","index":"https://api.getaiscan.app/api/agent/index"}', headers: [PAYMENT-REQUIRED, X-Payment-Required, X-Payment-Version, X-Payment-Amount, X-Payment-Currency, X-Payment-Network, X-Payment-Recipient, X-Payment-Asset]}
+  - {status: 402, url: 'POST https://api.getaiscan.app/api/agent/scan', note: 'the undeclared scan route answers with the full_audit challenge (amount 350000 = 0.35 USDC)'}
+  - {status: 404, url: 'POST https://api.getaiscan.app/api/agent/mcp', body: '{"error":"unknown_capability","available":["check_health","check_llms_txt","check_schema","check_agent_files","check_mcp","score_aeo","score_geo","score_agent","score_mcp","full_audit","generate_llms_txt","generate_mcp_json","fix_pack","generate_skill","compare","full_report","visibility_check","visibility_vs_competitor","visibility_fix_pack"]}', note: 'the capability router 404 — a JSON object listing all 19 valid ids'}
+  - {status: 404, url: 'GET https://api.getaiscan.app/openapi.yaml', body: Not found, note: 'the host-level 404 for any non-capability path — 9 bytes, text/plain'}
+  - {status: 405, url: 'POST https://getaiscan.app/mcp', body: '', note: 'the apex rejects POST to unknown paths with an empty 405'}
+  - {status: 200, url: 'POST https://api.getaiscan.app/a2a (JSON-RPC tasks/get)', body: '{"jsonrpc":"2.0","id":1,"error":{"code":-32001,"message":"Task not found: AIScan skills are stateless x402 HTTP calls, see message/send"}}'}
+  - {status: 200, url: 'POST https://api.getaiscan.app/a2a (JSON-RPC tools/list)', body: '{"jsonrpc":"2.0","id":1,"error":{"code":-32601,"message":"Method not found. Supported: message/send"}}'}
+  note: >-
+    Not RFC 9457. The contract declares exactly two responses per paid operation — 200 "Successful response" and
+    402 "Payment Required" with no schema — and one response (200) on index. No 400 (bad or missing url/brand/
+    niche), 429 or 5xx is declared anywhere, so what a malformed body, an unreachable target site or an
+    exhausted quota returns is undocumented. The JSON-RPC surface at /a2a uses JSON-RPC 2.0 error objects.
+problem_types:
+- status: 402
+  title: Payment required (x402 V2)
+  occurrences: 19
+  source_operations: [check_health, check_llms_txt, check_schema, check_agent_files, check_mcp, score_aeo, score_geo, score_agent, score_mcp, full_audit, generate_llms_txt, generate_mcp_json, fix_pack, generate_skill, compare, full_report, visibility_check, visibility_vs_competitor, visibility_fix_pack]
+  causes:
+  - No PAYMENT-SIGNATURE header on a paid route.
+  - (Undocumented) a payment that does not verify or does not cover the capability's price.
+  remediation: >-
+    Read the PAYMENT-REQUIRED header (base64 JSON) or the body: pay accepts[0].amount base units of the asset to
+    payTo on network eip155:8453 within maxTimeoutSeconds (300) — either sign an EIP-3009 authorization (exact
+    scheme, settled via the Coinbase CDP facilitator) or send the USDC directly — and retry the identical request
+    with PAYMENT-SIGNATURE set to the signed payload or the transaction hash.
+  retry_safe: true — the unpaid request performed no work and consumed nothing.
+- status: 404
+  title: Unknown capability
+  occurrences: 0
+  declared: false
+  observed: true
+  source_operations: []
+  causes:
+  - A capability id that is not one of the 19 the router knows (POST /api/agent/{anything-else}).
+  remediation: Use an id from the available[] list in the body, or from GET /api/agent/index.
+- status: 404
+  title: Not found (host level)
+  declared: false
+  observed: true
+  causes:
+  - Any path outside /api/agent/*, /a2a and /openapi.json on api.getaiscan.app.
+- status: 405
+  title: Method not allowed (apex)
+  declared: false
+  observed: true
+  causes:
+  - POST to an unknown path on getaiscan.app.
+jsonrpc_errors:
+- {code: -32601, message: 'Method not found. Supported: message/send', surface: 'https://api.getaiscan.app/a2a', meaning: any JSON-RPC method other than message/send}
+- {code: -32001, message: 'Task not found: AIScan skills are stateless x402 HTTP calls, see message/send', surface: 'https://api.getaiscan.app/a2a', meaning: 'A2A TaskNotFoundError; no task is ever created'}
+gaps:
+- No 400 declared or documented for a missing/invalid url, brand, niche, competitor, competitor_brand or weak_spots.
+- No 429 and no rate-limit headers declared or documented (see rate-limits/).
+- No 5xx declared; what happens when the target site is unreachable or the frontier-model call behind visibility_* fails is undocumented.
+- No error-code registry; the error field is free text.

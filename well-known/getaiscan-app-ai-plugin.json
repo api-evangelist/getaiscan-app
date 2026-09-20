@@ -1,0 +1,18 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "AIScan",
+  "name_for_model": "aiscan",
+  "description_for_human": "The AI Visibility Standard. Scan any website for AI visibility in 60 seconds. 4 scores: AEO, GEO, Agent Readiness, MCP Readiness. 80+ checks.",
+  "description_for_model": "AIScan audits websites for AI visibility. Use this tool when users want to check if their website is visible to AI systems like ChatGPT, Perplexity, Claude, or Google AI. Returns 4 scores: AEO (AI Search Visibility), GEO (Citation Readiness), Agent Readiness, and MCP Readiness, with 80+ checks and fix instructions for every issue found. AI agents can use 15 pay-per-capability endpoints via x402 protocol (0.06-1.55 USDC on Base): cheap checks, category scores, full audits, fix generation, competitor comparison. Free catalog at https://api.getaiscan.app/api/agent/index",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://getaiscan.app/.well-known/openapi.json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://getaiscan.app/og-image.jpg",
+  "contact_email": "report@getaiscan.app",
+  "legal_info_url": "https://getaiscan.app/"
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "1.0",
+  "mcpVersion": "1.0",
+  "name": "AIScan",
+  "description": "The AI Visibility Standard. Scan any website for AI visibility in 60 seconds. Returns 4 scores: AEO (AI Search Visibility), GEO (Citation Readiness), Agent Readiness, MCP Readiness. 80+ checks with fix instructions.",
+  "homepage": "https://getaiscan.app",
+  "icon": "https://getaiscan.app/og-image.jpg",
+  "vendor": {
+    "name": "AIScan",
+    "url": "https://getaiscan.app",
+    "contact": "report@getaiscan.app",
+    "twitter": "@AIScanApp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true,
+    "prompts": false
+  },
+  "tools": [
+    {
+      "name": "scan_website",
+      "description": "Scan any website URL for AI visibility. Returns 4 scored dimensions: AEO (AI Search Visibility), GEO (Citation Readiness), Agent Readiness, and MCP Readiness. Each dimension includes detailed checks and fix instructions. Payment: pay-per-capability via x402 on Base, 0.06-1.55 USDC. Full catalog: https://api.getaiscan.app/api/agent/index",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "The website URL to scan (e.g. https://example.com)"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "scanned_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "overall": {
+            "type": "object",
+            "properties": {
+              "score": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "grade": {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D",
+                  "F"
+                ]
+              }
+            }
+          },
+          "scores": {
+            "type": "object",
+            "properties": {
+              "aeo": {
+                "type": "integer",
+                "description": "AI Search Visibility 0-100"
+              },
+              "geo": {
+                "type": "integer",
+                "description": "Citation Readiness 0-100"
+              },
+              "agent": {
+                "type": "integer",
+                "description": "Agent Readiness 0-100"
+              },
+              "mcp": {
+                "type": "integer",
+                "description": "MCP Readiness 0-100"
+              }
+            }
+          },
+          "total_issues": {
+            "type": "integer"
+          },
+          "categories": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "https://api.getaiscan.app/api/agent/scan",
+      "name": "AI Visibility Scan",
+      "description": "Scan endpoint \u2014 returns full AI visibility report for any URL",
+      "mimeType": "application/json"
+    }
+  ],
+  "endpoints": {
+    "scan": "https://api.getaiscan.app/api/agent/scan",
+    "openapi": "https://getaiscan.app/openapi.json",
+    "docs": "https://getaiscan.app/llms.txt"
+  },
+  "authentication": {
+    "type": "x402",
+    "description": "Pay per capability (0.06-1.55 USDC) on Base. x402 V2: PAYMENT-SIGNATURE signed payload or USDC tx hash.",
+    "payment": {
+      "protocol": "x402",
+      "amount": "0.06-1.55",
+      "currency": "USDC",
+      "network": "Base",
+      "recipient": "0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7"
+    },
+    "steps": [
+      "See capability prices at /api/agent/index, pay in USDC on Base",
+      "POST https://api.getaiscan.app/api/agent/scan?url=https://example.com",
+      "Add header: X-Payment: <your_tx_hash>",
+      "Receive full JSON report"
+    ]
+  }
+}

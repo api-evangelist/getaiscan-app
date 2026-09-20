@@ -1,0 +1,442 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "AIScan",
+  "description": "AI visibility auditing for websites. 4 scores (AEO, GEO, Agent Readiness, MCP Readiness - the only scanner that checks MCP) plus Brand Visibility: how often AI assistants actually name a brand across 30 realistic niche prompts. 18 pay-per-use capabilities via x402 on Base, 0.06-3.50 USDC. No API keys, no signup.",
+  "url": "https://api.getaiscan.app/a2a",
+  "preferredTransport": "JSONRPC",
+  "provider": {
+    "organization": "AIScan",
+    "url": "https://getaiscan.app"
+  },
+  "version": "5.9.1",
+  "documentationUrl": "https://getaiscan.app/llms.txt",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "defaultInputModes": [
+    "application/json"
+  ],
+  "defaultOutputModes": [
+    "application/json"
+  ],
+  "payment_schemes": [
+    {
+      "protocol": "x402",
+      "x402Version": 2,
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "currency": "USDC",
+      "payTo": "0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7",
+      "flows": [
+        "exact (EIP-3009 via Coinbase CDP facilitator)",
+        "direct-transfer (USDC tx hash)"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "check_health",
+      "name": "Check Health",
+      "description": "Site availability, robots.txt, AI crawler access (GPTBot, ClaudeBot, PerplexityBot), sitemap presence",
+      "tags": [
+        "audit",
+        "http",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.06",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/check_health"
+      }
+    },
+    {
+      "id": "check_llms_txt",
+      "name": "Check Llms Txt",
+      "description": "llms.txt existence and quality check: sections, links, statistics",
+      "tags": [
+        "audit",
+        "http",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.07",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/check_llms_txt"
+      }
+    },
+    {
+      "id": "check_schema",
+      "name": "Check Schema",
+      "description": "Schema.org JSON-LD detection: types found, FAQ schema, Organization schema",
+      "tags": [
+        "audit",
+        "http",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.07",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/check_schema"
+      }
+    },
+    {
+      "id": "check_agent_files",
+      "name": "Check Agent Files",
+      "description": "openapi.json, ai-plugin.json, x402 payment support detection",
+      "tags": [
+        "audit",
+        "http",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.07",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/check_agent_files"
+      }
+    },
+    {
+      "id": "check_mcp",
+      "name": "Check Mcp",
+      "description": "MCP discoverability: /.well-known/mcp.json, agent.json, MCP Server Card",
+      "tags": [
+        "audit",
+        "mcp",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.08",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/check_mcp"
+      }
+    },
+    {
+      "id": "score_aeo",
+      "name": "Score Aeo",
+      "description": "Full AEO (AI Search Visibility) score 0-100 with detailed checks",
+      "tags": [
+        "score",
+        "ai",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.15",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/score_aeo"
+      }
+    },
+    {
+      "id": "score_geo",
+      "name": "Score Geo",
+      "description": "Full GEO (Citation Readiness) score 0-100 with detailed checks",
+      "tags": [
+        "score",
+        "ai",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.15",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/score_geo"
+      }
+    },
+    {
+      "id": "score_agent",
+      "name": "Score Agent",
+      "description": "Full Agent Readiness score 0-100 with detailed checks",
+      "tags": [
+        "score",
+        "ai",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.15",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/score_agent"
+      }
+    },
+    {
+      "id": "score_mcp",
+      "name": "Score Mcp",
+      "description": "Full MCP Readiness score 0-100, the only scanner that checks this",
+      "tags": [
+        "score",
+        "mcp",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.20",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/score_mcp"
+      }
+    },
+    {
+      "id": "generate_llms_txt",
+      "name": "Generate Llms Txt",
+      "description": "Generate a ready-to-deploy llms.txt tailored to the site",
+      "tags": [
+        "generate",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.30",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/generate_llms_txt"
+      }
+    },
+    {
+      "id": "generate_mcp_json",
+      "name": "Generate Mcp Json",
+      "description": "Generate ready-to-deploy mcp.json + agent.json for the site",
+      "tags": [
+        "generate",
+        "mcp",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.30",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/generate_mcp_json"
+      }
+    },
+    {
+      "id": "full_audit",
+      "name": "Full Audit",
+      "description": "Complete audit: all 4 scores (AEO, GEO, Agent, MCP), 80+ checks",
+      "tags": [
+        "audit",
+        "score",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.35",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/full_audit"
+      }
+    },
+    {
+      "id": "fix_pack",
+      "name": "Fix Pack",
+      "description": "Copy-paste fix instructions for every failed check",
+      "tags": [
+        "fix",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.55",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/fix_pack"
+      }
+    },
+    {
+      "id": "compare",
+      "name": "Compare",
+      "description": "Gap analysis vs a competitor URL: who wins each category and why",
+      "tags": [
+        "compare",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "0.80",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/compare"
+      }
+    },
+    {
+      "id": "visibility_fix_pack",
+      "name": "Visibility Fix Pack",
+      "description": "Ready-to-deploy fix materials for weak visibility areas: citable passages, FAQ schema JSON-LD, llms.txt sections. Needs weak_spots from a prior visibility_check",
+      "tags": [
+        "fix",
+        "visibility",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "1.25",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/visibility_fix_pack"
+      }
+    },
+    {
+      "id": "full_report",
+      "name": "Full Report",
+      "description": "Everything: full audit + fix pack + generated llms.txt and mcp.json",
+      "tags": [
+        "audit",
+        "fix",
+        "generate",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "1.55",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/full_report"
+      }
+    },
+    {
+      "id": "visibility_check",
+      "name": "Visibility Check",
+      "description": "Brand visibility in AI answers: 30 realistic niche prompts through a frontier AI model - mention rate, share of voice, who gets recommended instead. Params: brand + niche",
+      "tags": [
+        "visibility",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "1.95",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/visibility_check"
+      }
+    },
+    {
+      "id": "visibility_vs_competitor",
+      "name": "Visibility Vs Competitor",
+      "description": "Head-to-head brand visibility: two brands measured on the same 30 AI answers - mention rates, share of voice, verdict. Params: brand + competitor_brand + niche",
+      "tags": [
+        "visibility",
+        "compare",
+        "x402",
+        "ai-visibility"
+      ],
+      "x-payment-info": {
+        "authMode": "payment",
+        "protocols": [
+          "x402"
+        ],
+        "price": {
+          "amount": "3.50",
+          "currency": "USDC"
+        },
+        "endpoint": "https://api.getaiscan.app/api/agent/visibility_vs_competitor"
+      }
+    }
+  ],
+  "additionalInterfaces": [
+    {
+      "transport": "JSONRPC",
+      "url": "https://api.getaiscan.app/a2a"
+    },
+    {
+      "transport": "HTTP+JSON",
+      "url": "https://api.getaiscan.app"
+    }
+  ]
+}

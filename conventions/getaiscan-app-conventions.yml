@@ -1,0 +1,103 @@
+generated: '2026-09-19'
+method: searched
+source: openapi/getaiscan-app-openapi.json
+derived_from: openapi/getaiscan-app-openapi.json
+docs:
+- https://getaiscan.app/llms.txt
+- https://api.getaiscan.app/api/agent/index
+base_url: https://api.getaiscan.app
+media_type: application/json
+request_style:
+  method: POST for every capability; GET for the free index
+  body: >-
+    JSON. Site capabilities take {"url": "https://example.com"}; compare adds "competitor"; the three
+    visibility capabilities take {"brand", "niche"} (no url), visibility_vs_competitor adds "competitor_brand",
+    visibility_fix_pack adds "weak_spots" (an array returned by every visibility_check response).
+  query_alternative: >-
+    The free index publishes each endpoint as a template with query parameters
+    (…/check_health?url={site_url}); the live 402 echoed the url back as ?url= even when it was sent in the
+    body, so both carriers reach the router. The OpenAPI documents the body form only.
+auth:
+  style: x402 V2 payment in the PAYMENT-SIGNATURE header (signed EIP-3009 authorization or Base USDC tx hash); no API key, account or OAuth
+  detail: authentication/getaiscan-app-authentication.yml
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  retention: undocumented
+  description: >-
+    No Idempotency-Key header, parameter or body field exists on any of the 19 paid operations and the docs
+    describe none. Every paid operation is a priced computation over a target site or brand, so the retry
+    hazard is financial rather than data-integrity: a retry after an ambiguous outcome is a second x402
+    payment. Whether a PAYMENT-SIGNATURE (a tx hash on the direct-transfer flow, or an EIP-3009 authorization
+    whose nonce the CDP facilitator settles once) can be replayed to re-fetch a result is not documented in
+    either direction, so no replay protection is asserted here. The provider's stated mitigation is on the
+    unpaid side only — an unpaid call returns 402 and consumes nothing.
+  gaps:
+  - No idempotency key on any paid POST.
+  - No documented safe-retry guidance for a timeout after payment was submitted.
+  - No documented behaviour for re-presenting the same tx hash.
+dry_run_mode:
+  supported: false
+  status: none
+  mechanism: null
+  note: >-
+    No sandbox, testnet, test-mode key or free tier of any paid capability. The only free call is GET
+    /api/agent/index, which returns prices and templates, not a rehearsal of a capability. The homepage offers
+    a free human "site scan" preview in the browser, but that is not an API surface. No Sandbox pointer is
+    emitted.
+reversibility:
+  grade: none
+  status: none
+  docs: []
+  note: >-
+    The API has no data write surface: nothing is created, stored or mutated on the provider's side by any
+    operation — each call spends money to compute a report and returns it in-band. There is therefore nothing
+    to cancel, void or restore, and the only reversible quantity is the payment. No refund policy, terms of
+    service or support commitment is published anywhere on the surface (the ai-plugin's legal_info_url is the
+    homepage; every legal-looking path is the SPA shell), so no reversal path for a payment is documented and no
+    window is stated. Recorded as none rather than na because money does change hands and the provider has
+    not said what happens when a paid call fails.
+  write_surfaces:
+  - operation: every POST /api/agent/{capability}
+    action: Spend 0.06-3.50 USDC to run a check, score, audit, generation or brand-visibility measurement
+    reversal: none documented
+    reversal_operation: null
+    window: null
+    grade: none
+pagination:
+  supported: false
+  note: No list endpoints; every response is a single report object.
+field_selection:
+  supported: false
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: null
+  note: No request-id header declared or observed; Cloudflare's cf-ray is the only correlation id on responses.
+versioning:
+  scheme: unversioned paths; document versions drift across surfaces (5.9.4 API host, 5.9.1 card, 5.9.0 apex)
+  detail: lifecycle/getaiscan-app-lifecycle.yml
+error_envelope:
+  format: json-error-object
+  shape: '{"error": "<string>", ...} on 404; the x402 PaymentRequired payload on 402; JSON-RPC 2.0 error objects on /a2a'
+  detail: errors/getaiscan-app-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: undocumented
+  note: No rate limits documented and no RateLimit-* / X-RateLimit-* / Retry-After header observed on the free index. The x402 challenge carries maxTimeoutSeconds 300, a payment deadline rather than a rate limit.
+  detail: rate-limits/getaiscan-app-rate-limits.yml
+payment_semantics:
+  challenge: HTTP 402 with PAYMENT-REQUIRED (base64 JSON) and X-Payment-* headers, JSON body with accepts[] and instructions
+  credential: PAYMENT-SIGNATURE header on the retried request
+  amounts: USDC base units (6 decimals) in accepts[].amount; decimal USDC in the body's price and in the index
+  deadline: maxTimeoutSeconds 300
+  wallet: '0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7 (Base)'
+  free: GET /api/agent/index
+cors:
+  allow_origin: https://getaiscan.app
+  allow_headers: [Content-Type, X-Payment, X-PAYMENT, PAYMENT-SIGNATURE, Payment-Signature]
+  expose_headers: [PAYMENT-REQUIRED, PAYMENT-RESPONSE, X-Payment-Required, X-Payment-Version, X-Payment-Amount, X-Payment-Currency, X-Payment-Network, X-Payment-Recipient, X-Payment-Asset, X-Payment-Description, X-PAYMENT-RESPONSE]
+  note: Browser calls are permitted only from the provider's own origin; server-side and agent callers are unaffected.
