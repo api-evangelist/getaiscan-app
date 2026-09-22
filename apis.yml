@@ -26,7 +26,7 @@ tags:
 - Answer Engine Optimization
 - Generative Engine Optimization
 - Agents
-- Agent Commerce
+- Agentic Commerce
 - A2A
 - MCP
 - x402
@@ -43,6 +43,7 @@ tags_raw:
 - MCP
 - x402
 - Agent-native
+- Agent Commerce
 apis:
 - aid: getaiscan-app:aiscan-agent-api
   name: AIScan Agent API
@@ -60,6 +61,12 @@ apis:
   humanURL: https://getaiscan.app/
   baseURL: https://api.getaiscan.app
   tags:
+  - AI Visibility
+  - Website Auditing
+  - x402
+  - Agentic Commerce
+  - agent-native
+  tags_raw:
   - AI Visibility
   - Website Auditing
   - x402
