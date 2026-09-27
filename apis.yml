@@ -30,7 +30,7 @@ tags:
 - A2A
 - MCP
 - x402
-- agent-native
+- Agent-Native
 tags_raw:
 - AI visibility
 - Website auditing
@@ -44,65 +44,26 @@ tags_raw:
 - x402
 - Agent-native
 - Agent Commerce
+- agent-native
 apis:
-- aid: getaiscan-app:aiscan-agent-api
-  name: AIScan Agent API
-  description: >-
-    Pay-per-capability REST API for AI-visibility auditing: five cheap HTTP checks (site health and AI-crawler
-    access, llms.txt, Schema.org JSON-LD, agent files, MCP discoverability), four category scores (AEO, GEO,
-    Agent Readiness, MCP Readiness), a full audit, generated llms.txt / mcp.json / SKILL.md fix files, a fix
-    pack, a competitor comparison, a bundled full report, and three Brand Visibility capabilities that measure
-    brand mentions across 30 AI answers. Every capability is POST /api/agent/{capability} with a JSON body and
-    an x402 V2 payment in the PAYMENT-SIGNATURE header (a signed payload settled through the Coinbase CDP
-    facilitator, or a Base USDC transfer tx hash); an unpaid call returns HTTP 402 with the price. GET
-    /api/agent/index is the free catalog. 20 operations across 20 paths, OpenAPI 3.1.0 version 5.9.4 at
-    https://api.getaiscan.app/openapi.json with servers[] https://api.getaiscan.app.
-  image: https://getaiscan.app/og-image.jpg
-  humanURL: https://getaiscan.app/
-  baseURL: https://api.getaiscan.app
-  tags:
-  - AI Visibility
-  - Website Auditing
-  - x402
-  - Agentic Commerce
-  - agent-native
-  tags_raw:
-  - AI Visibility
-  - Website Auditing
-  - x402
-  - Agent Commerce
-  - agent-native
-  properties:
-  - type: OpenAPI
-    url: openapi/getaiscan-app-openapi.json
-  - type: OpenAPI
-    name: AIScan Agent API OpenAPI (provider-hosted, api.getaiscan.app, 5.9.4)
-    url: https://api.getaiscan.app/openapi.json
-  - type: OpenAPI
-    name: AIScan Agent API OpenAPI (apex copy, 5.9.0, one operation behind)
-    url: https://getaiscan.app/openapi.json
-  - type: Documentation
-    url: https://getaiscan.app/llms.txt
-  - type: APIReference
-    url: https://api.getaiscan.app/openapi.json
-  - type: Overlay
-    url: overlays/getaiscan-app-openapi-overlay.yaml
-  - type: ToolCrosswalk
-    url: mcp/getaiscan-app-tool-crosswalk.yml
 - aid: getaiscan-app:aiscan-a2a-agent
   name: AIScan A2A Agent
   description: >-
     Agent2Agent (A2A) protocol surface: an agent card served from https://getaiscan.app/.well-known/agent-card.json
     (protocolVersion 0.3.0, JSONRPC transport, card version 5.9.1) advertising 18 skills — the same pay-per-use
-    capabilities as the REST contract — each carrying an x-payment-info block with its USDC price and the REST
-    endpoint that fulfils it, plus a non-standard payment_schemes[] block declaring x402 V2 on Base. The JSON-RPC
-    endpoint at https://api.getaiscan.app/a2a answers message/send anonymously with routing guidance and rejects
-    every other method (-32601 "Supported: message/send"); the skills themselves are stateless x402 HTTP calls,
-    so an agent uses the card to discover and the REST API to execute.
+    capabilities as the REST contract — each carrying an x-payment-info block with its USDC price and
+    the REST endpoint that fulfils it, plus a non-standard payment_schemes[] block declaring x402 V2 on
+    Base. The JSON-RPC endpoint at https://api.getaiscan.app/a2a answers message/send anonymously with
+    routing guidance and rejects every other method (-32601 "Supported: message/send"); the skills themselves
+    are stateless x402 HTTP calls, so an agent uses the card to discover and the REST API to execute.
   image: https://getaiscan.app/og-image.jpg
   humanURL: https://getaiscan.app/.well-known/agent-card.json
   baseURL: https://api.getaiscan.app/a2a
   tags:
+  - A2A
+  - Agent-Native
+  - x402
+  tags_raw:
   - A2A
   - agent-native
   - x402
@@ -112,12 +73,46 @@ apis:
   - type: AgentCard
     name: A2A Agent Card (provider-hosted)
     url: https://getaiscan.app/.well-known/agent-card.json
+- aid: getaiscan-app:getaiscan-app-agent-api
+  name: AIScan Agent API
+  description: The Agent API from AIScan — 2 operation(s) for agent.
+  humanURL: https://getaiscan.app/
+  baseURL: https://api.getaiscan.app
+  tags:
+  - Agent
+  properties:
+  - type: OpenAPI
+    url: openapi/getaiscan-app-agent-api-openapi.yml
+  - type: Documentation
+    url: https://getaiscan.app/llms.txt
+  - type: APIReference
+    url: https://api.getaiscan.app/openapi.json
+  - type: ToolCrosswalk
+    url: mcp/getaiscan-app-tool-crosswalk.yml
+- aid: getaiscan-app:getaiscan-app-ai-visibility-api
+  name: AIScan AI Visibility API
+  description: The AI Visibility API from AIScan — 19 operation(s) for ai visibility.
+  humanURL: https://getaiscan.app/
+  baseURL: https://api.getaiscan.app
+  tags:
+  - AI Visibility
+  properties:
+  - type: OpenAPI
+    url: openapi/getaiscan-app-ai-visibility-api-openapi.yml
+  - type: Documentation
+    url: https://getaiscan.app/llms.txt
+  - type: APIReference
+    url: https://api.getaiscan.app/openapi.json
+  - type: ToolCrosswalk
+    url: mcp/getaiscan-app-tool-crosswalk.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/getaiscan-app-openapi-overlay.yaml
 - type: Website
   url: https://getaiscan.app/
 - type: Documentation
@@ -164,3 +159,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 31
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://getaiscan.app/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3.0"
+  control: 200

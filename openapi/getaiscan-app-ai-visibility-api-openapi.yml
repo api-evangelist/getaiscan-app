@@ -1,0 +1,1033 @@
+openapi: 3.2.0
+info:
+  title: Getaiscan App AI Visibility API
+  contact:
+    url: https://getaiscan.app
+  x-refined-note:
+  - x-guidance differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged AI Visibility across 2 of this provider''s published API definitions: getaiscan-app-openapi-apex-5.9.0.json, getaiscan-app-openapi.json. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.getaiscan.app
+tags:
+- name: AI Visibility
+paths:
+  /api/agent/check_health:
+    post:
+      operationId: check_health
+      summary: Site availability, robots.txt, AI crawler access (GPTBot, ClaudeBot…
+      tags:
+      - AI Visibility
+      description: Site availability, robots.txt, AI crawler access (GPTBot, ClaudeBot, PerplexityBot), sitemap presence. Pay 0.06 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.060000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/check_llms_txt:
+    post:
+      operationId: check_llms_txt
+      summary: 'llms.txt existence and quality check: sections, links, statistics'
+      tags:
+      - AI Visibility
+      description: 'llms.txt existence and quality check: sections, links, statistics. Pay 0.07 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.070000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/check_schema:
+    post:
+      operationId: check_schema
+      summary: 'Schema.org JSON-LD detection: types found, FAQ schema, Organization schema'
+      tags:
+      - AI Visibility
+      description: 'Schema.org JSON-LD detection: types found, FAQ schema, Organization schema. Pay 0.07 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.070000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/check_agent_files:
+    post:
+      operationId: check_agent_files
+      summary: openapi.json, ai-plugin.json, x402 payment support detection
+      tags:
+      - AI Visibility
+      description: openapi.json, ai-plugin.json, x402 payment support detection. Pay 0.07 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.070000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/check_mcp:
+    post:
+      operationId: check_mcp
+      summary: 'MCP discoverability: /.well-known/mcp.json, agent.json, MCP Server Card'
+      tags:
+      - AI Visibility
+      description: 'MCP discoverability: /.well-known/mcp.json, agent.json, MCP Server Card. Pay 0.08 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.080000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/score_aeo:
+    post:
+      operationId: score_aeo
+      summary: Full AEO (AI Search Visibility) score 0-100 with detailed checks
+      tags:
+      - AI Visibility
+      description: Full AEO (AI Search Visibility) score 0-100 with detailed checks. Pay 0.15 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.150000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/score_geo:
+    post:
+      operationId: score_geo
+      summary: Full GEO (Citation Readiness) score 0-100 with detailed checks
+      tags:
+      - AI Visibility
+      description: Full GEO (Citation Readiness) score 0-100 with detailed checks. Pay 0.15 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.150000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/score_agent:
+    post:
+      operationId: score_agent
+      summary: Full Agent Readiness score 0-100 with detailed checks
+      tags:
+      - AI Visibility
+      description: Full Agent Readiness score 0-100 with detailed checks. Pay 0.15 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.150000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/score_mcp:
+    post:
+      operationId: score_mcp
+      summary: Full MCP Readiness score 0-100, the only scanner that checks this
+      tags:
+      - AI Visibility
+      description: Full MCP Readiness score 0-100, the only scanner that checks this. Pay 0.2 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.200000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/full_audit:
+    post:
+      operationId: full_audit
+      summary: 'Complete audit: all 4 scores (AEO, GEO, Agent, MCP), 80+ checks'
+      tags:
+      - AI Visibility
+      description: 'Complete audit: all 4 scores (AEO, GEO, Agent, MCP), 80+ checks. Pay 0.35 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.350000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/generate_llms_txt:
+    post:
+      operationId: generate_llms_txt
+      summary: Generate a ready-to-deploy llms.txt tailored to the site
+      tags:
+      - AI Visibility
+      description: Generate a ready-to-deploy llms.txt tailored to the site. Pay 0.3 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.300000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/generate_mcp_json:
+    post:
+      operationId: generate_mcp_json
+      summary: Generate ready-to-deploy mcp.json + agent.json for the site
+      tags:
+      - AI Visibility
+      description: Generate ready-to-deploy mcp.json + agent.json for the site. Pay 0.3 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.300000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/fix_pack:
+    post:
+      operationId: fix_pack
+      summary: Copy-paste fix instructions for every failed check
+      tags:
+      - AI Visibility
+      description: Copy-paste fix instructions for every failed check. Pay 0.55 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.550000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/compare:
+    post:
+      operationId: compare
+      summary: 'Gap analysis vs a competitor URL: who wins each category and why'
+      tags:
+      - AI Visibility
+      description: 'Gap analysis vs a competitor URL: who wins each category and why. Pay 0.8 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.800000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+                competitor:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the competitor website to compare against
+              required:
+              - url
+              - competitor
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/full_report:
+    post:
+      operationId: full_report
+      summary: 'Everything: full audit + fix pack + generated llms.txt and mcp.json'
+      tags:
+      - AI Visibility
+      description: 'Everything: full audit + fix pack + generated llms.txt and mcp.json. Pay 1.55 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '1.550000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/visibility_check:
+    post:
+      operationId: visibility_check
+      summary: 'Brand visibility in AI answers: 30 realistic niche prompts answered by Claude…'
+      tags:
+      - AI Visibility
+      description: 'Brand visibility in AI answers: 30 realistic niche prompts answered by Claude, mention rate, share of voice, who gets recommended instead. Params: brand + niche (no url needed). Pay 1.95 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '1.950000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand:
+                  type: string
+                  minLength: 1
+                  description: Brand name to measure, e.g. "Notion"
+                niche:
+                  type: string
+                  minLength: 1
+                  description: Market niche or category, e.g. "project management software"
+              required:
+              - brand
+              - niche
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/visibility_vs_competitor:
+    post:
+      operationId: visibility_vs_competitor
+      summary: 'Head-to-head brand visibility in AI answers: 30 niche prompts, both brands…'
+      tags:
+      - AI Visibility
+      description: 'Head-to-head brand visibility in AI answers: 30 niche prompts, both brands measured on the same answers - mention rates, share of voice, verdict. Params: brand + competitor_brand + niche (no url needed). Pay 3.5 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '3.500000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand:
+                  type: string
+                  minLength: 1
+                  description: Brand name to measure, e.g. "Notion"
+                niche:
+                  type: string
+                  minLength: 1
+                  description: Market niche or category, e.g. "project management software"
+                competitor_brand:
+                  type: string
+                  minLength: 1
+                  description: Competitor brand name to compare against, e.g. "Asana"
+              required:
+              - brand
+              - niche
+              - competitor_brand
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/visibility_fix_pack:
+    post:
+      operationId: visibility_fix_pack
+      summary: 'Ready-to-deploy fix materials for weak visibility areas: citable passages, FAQ…'
+      tags:
+      - AI Visibility
+      description: 'Ready-to-deploy fix materials for weak visibility areas: citable passages, FAQ schema JSON-LD, llms.txt sections. Params: brand + niche + weak_spots array (from a prior visibility_check). Pay 1.25 USDC via x402 on Base (eip155:8453).'
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '1.250000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand:
+                  type: string
+                  minLength: 1
+                  description: Brand name to measure, e.g. "Notion"
+                niche:
+                  type: string
+                  minLength: 1
+                  description: Market niche or category, e.g. "project management software"
+                weak_spots:
+                  type: array
+                  minItems: 1
+                  maxItems: 3
+                  description: Weak areas from a prior visibility_check analysis
+                  items:
+                    type: object
+                    properties:
+                      topic:
+                        type: string
+                      who_wins:
+                        type: string
+                      evidence:
+                        type: string
+                    required:
+                    - topic
+              required:
+              - brand
+              - niche
+              - weak_spots
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+  /api/agent/generate_skill:
+    post:
+      operationId: generate_skill
+      summary: Generate a ready-to-run SKILL.md fix file that Claude Code and other AI coding…
+      tags:
+      - AI Visibility
+      description: Generate a ready-to-run SKILL.md fix file that Claude Code and other AI coding agents execute to apply every fix automatically. Pay 0.45 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.450000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
+    servers:
+    - url: https://api.getaiscan.app
+components:
+  securitySchemes:
+    x402:
+      type: apiKey
+      in: header
+      name: PAYMENT-SIGNATURE
+      description: 'x402 V2 payment: signed payload or Base USDC tx hash'
+x-refined-from:
+- getaiscan-app-openapi-apex-5.9.0.json
+- getaiscan-app-openapi.json
