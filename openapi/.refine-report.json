@@ -1,37 +1,32 @@
 {
   "provider": "getaiscan-app",
   "sources": [
-    "_original/getaiscan-app-openapi-apex-5.9.0.json",
-    "getaiscan-app-openapi.json",
-    "well-known/getaiscan-app-agent.json"
+    "_original/getaiscan-app-agent.json",
+    "_original/getaiscan-app-openapi.json"
   ],
   "outputs": [
-    "getaiscan-app-ai-visibility-api-openapi.yml",
-    "getaiscan-app-agent-api-openapi.yml"
+    "getaiscan-app-agent-api-openapi.yml",
+    "getaiscan-app-ai-visibility-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/getaiscan-app-openapi.json",
-    "archived well-known/getaiscan-app-agent.json"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
-    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "discovered stray spec: well-known/getaiscan-app-agent.json",
-    "getaiscan-app-openapi-apex-5.9.0.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "getaiscan-app-openapi-apex-5.9.0.json: tagged paths GET /api/agent/index -> Agent",
-    "getaiscan-app-openapi-apex-5.9.0.json: declared missing tag: AI Visibility",
-    "getaiscan-app-openapi-apex-5.9.0.json: declared missing tag: Agent",
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "getaiscan-app-agent.json: upgraded openapi https://api.getaiscan.app/openapi.json -> OpenAPI 3.2.0",
+    "getaiscan-app-agent.json: tagged paths POST /api/agent/scan -> Agent",
+    "getaiscan-app-agent.json: declared missing tag: Agent",
     "getaiscan-app-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "getaiscan-app-openapi.json: tagged paths GET /api/agent/index -> Agent",
     "getaiscan-app-openapi.json: declared missing tag: AI Visibility",
     "getaiscan-app-openapi.json: declared missing tag: Agent",
-    "getaiscan-app-agent.json: upgraded openapi https://api.getaiscan.app/openapi.json -> OpenAPI 3.2.0",
-    "getaiscan-app-agent.json: tagged paths POST /api/agent/scan -> Agent",
-    "getaiscan-app-agent.json: declared missing tag: Agent",
-    "tag 'AI Visibility' spans 2 source specs (getaiscan-app-openapi-apex-5.9.0.json, getaiscan-app-openapi.json): per-path servers applied",
-    "tag 'Agent' spans 3 source specs (getaiscan-app-openapi-apex-5.9.0.json, getaiscan-app-openapi.json, getaiscan-app-agent.json): per-path servers applied",
-    "apis.yml register: written (+2 apis, 3 total)"
+    "tag 'Agent' spans 2 source specs (getaiscan-app-agent.json, getaiscan-app-openapi.json): per-path servers applied",
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/getaiscan-app-openapi-apex-5.9.0.json: archived document superseded by a larger archived document",
+    "getaiscan-app-agent-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "getaiscan-app-ai-visibility-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

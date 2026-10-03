@@ -4,33 +4,13 @@ info:
   x-refined-note:
   - x-guidance differs across the merged source definitions and was not carried
   version: '1.0'
-  description: 'Operations tagged Agent across 3 of this provider''s published API definitions: getaiscan-app-openapi-apex-5.9.0.json, getaiscan-app-openapi.json, getaiscan-app-agent.json. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Agent across 2 of this provider''s published API definitions: getaiscan-app-agent.json, getaiscan-app-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.getaiscan.app
+  description: AIScan API
 tags:
 - name: Agent
 paths:
-  /api/agent/index:
-    get:
-      operationId: index
-      summary: Free capability catalog with prices and endpoints
-      security: []
-      responses:
-        '200':
-          description: Catalog of all capabilities
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  capabilities:
-                    type: object
-                required:
-                - capabilities
-      tags:
-      - Agent
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/scan:
     post:
       summary: Scan website for AI visibility
@@ -100,14 +80,48 @@ paths:
     servers:
     - url: https://api.getaiscan.app
       description: AIScan API
+  /api/agent/index:
+    get:
+      operationId: index
+      summary: Free capability catalog with prices and endpoints
+      security: []
+      responses:
+        '200':
+          description: Catalog of all capabilities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capabilities:
+                    type: object
+                required:
+                - capabilities
+      tags:
+      - Agent
+    servers:
+    - url: https://api.getaiscan.app
 components:
   securitySchemes:
     x402:
       type: apiKey
       in: header
-      name: PAYMENT-SIGNATURE
-      description: 'x402 V2 payment: signed payload or Base USDC tx hash'
+      name: X-Payment
+      description: 'x402 V2 payment protocol. 15 capabilities, 0.06-1.55 USDC on Base. Signed PAYMENT-SIGNATURE payload (CDP facilitator) or direct USDC transfer + tx hash. Catalog: /api/agent/index'
 x-refined-from:
-- getaiscan-app-openapi-apex-5.9.0.json
-- getaiscan-app-openapi.json
 - getaiscan-app-agent.json
+- getaiscan-app-openapi.json
+x-ai-agent:
+  name: AIScan AI Visibility Scanner
+  description: Scan websites for AI visibility including MCP Readiness
+  capabilities:
+  - ai-visibility-scan
+  - mcp-readiness-check
+  - aeo-audit
+  - geo-audit
+  payment:
+    protocol: x402
+    amount: 0.06-1.55
+    currency: USDC
+    network: Base
+    recipient: '0x0a28ace35b9687a9334cd503b3c7d4b23734a1c7'

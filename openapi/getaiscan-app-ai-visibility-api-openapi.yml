@@ -1,12 +1,11 @@
 openapi: 3.2.0
 info:
-  title: Getaiscan App AI Visibility API
+  title: AIScan Agent AI Visibility API
+  version: 5.9.4
+  description: 'AI visibility auditing for websites, pay-per-capability via x402 on Base. 4 score types: AEO (AI Search Visibility), GEO (Citation Readiness), Agent Readiness, and MCP Readiness - the only scanner that checks MCP. Plus brand visibility measurement: how often AI assistants actually mention your brand.'
+  x-guidance: 'Start with GET /api/agent/index (free) to see all 19 capabilities and prices. Cheap checks (check_health, check_llms_txt, check_schema, check_mcp, 0.06-0.08 USDC) are pure HTTP checks. Scores (score_aeo/geo/agent/mcp, 0.15-0.20 USDC) return a 0-100 score with detailed checks. full_audit (0.35) returns all 4 scores. fix_pack (0.55) returns copy-paste fixes for failed checks. generate_skill (0.45) returns a ready-to-run SKILL.md file that Claude Code and other AI coding agents execute to apply every fix automatically. compare (0.80) needs both url and competitor in the JSON body. full_report (1.55) bundles everything. visibility_check (1.95) measures how often AI assistants mention a brand across 30 realistic niche prompts - needs brand and niche in the JSON body, no url. visibility_vs_competitor (3.50) measures two brands head-to-head on the same 30 prompts - needs brand, competitor_brand and niche. visibility_fix_pack (1.25) generates ready-to-deploy fix materials (citable passages, FAQ schema, llms.txt sections) - needs brand, niche and weak_spots array from a prior visibility_check; the weak_spots field is included in every visibility_check response. All paid routes accept POST with JSON body and x402 payment: either a signed PAYMENT-SIGNATURE payload (settled via Coinbase CDP facilitator) or a Base USDC transfer tx hash in the same header (direct-transfer).'
   contact:
     url: https://getaiscan.app
-  x-refined-note:
-  - x-guidance differs across the merged source definitions and was not carried
-  version: '1.0'
-  description: 'Operations tagged AI Visibility across 2 of this provider''s published API definitions: getaiscan-app-openapi-apex-5.9.0.json, getaiscan-app-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.getaiscan.app
 tags:
@@ -61,8 +60,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/check_llms_txt:
     post:
       operationId: check_llms_txt
@@ -112,8 +109,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/check_schema:
     post:
       operationId: check_schema
@@ -163,8 +158,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/check_agent_files:
     post:
       operationId: check_agent_files
@@ -214,8 +207,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/check_mcp:
     post:
       operationId: check_mcp
@@ -265,8 +256,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/score_aeo:
     post:
       operationId: score_aeo
@@ -316,8 +305,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/score_geo:
     post:
       operationId: score_geo
@@ -367,8 +354,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/score_agent:
     post:
       operationId: score_agent
@@ -418,8 +403,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/score_mcp:
     post:
       operationId: score_mcp
@@ -469,8 +452,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/full_audit:
     post:
       operationId: full_audit
@@ -520,8 +501,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/generate_llms_txt:
     post:
       operationId: generate_llms_txt
@@ -571,8 +550,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/generate_mcp_json:
     post:
       operationId: generate_mcp_json
@@ -622,8 +599,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/fix_pack:
     post:
       operationId: fix_pack
@@ -673,8 +648,55 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
+  /api/agent/generate_skill:
+    post:
+      operationId: generate_skill
+      summary: Generate a ready-to-run SKILL.md fix file that Claude Code and other AI coding…
+      tags:
+      - AI Visibility
+      description: Generate a ready-to-run SKILL.md fix file that Claude Code and other AI coding agents execute to apply every fix automatically. Pay 0.45 USDC via x402 on Base (eip155:8453).
+      x-payment-info:
+        price:
+          mode: fixed
+          currency: USD
+          amount: '0.450000'
+        protocols:
+        - x402: {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  minLength: 1
+                  description: Full URL of the website to analyze, e.g. https://example.com
+              required:
+              - url
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  capability:
+                    type: string
+                    description: Capability that was executed
+                  url:
+                    type: string
+                    description: Analyzed site URL
+                  payment:
+                    type: object
+                    description: Payment settlement info
+                required:
+                - capability
+        '402':
+          description: Payment Required
   /api/agent/compare:
     post:
       operationId: compare
@@ -730,8 +752,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/full_report:
     post:
       operationId: full_report
@@ -781,15 +801,13 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/visibility_check:
     post:
       operationId: visibility_check
-      summary: 'Brand visibility in AI answers: 30 realistic niche prompts answered by Claude…'
+      summary: 'Brand visibility in AI answers: AIScan runs 30 realistic niche prompts through…'
       tags:
       - AI Visibility
-      description: 'Brand visibility in AI answers: 30 realistic niche prompts answered by Claude, mention rate, share of voice, who gets recommended instead. Params: brand + niche (no url needed). Pay 1.95 USDC via x402 on Base (eip155:8453).'
+      description: 'Brand visibility in AI answers: AIScan runs 30 realistic niche prompts through a frontier AI model - mention rate, share of voice, who gets recommended instead. Params: brand + niche (no url needed). Pay 1.95 USDC via x402 on Base (eip155:8453).'
       x-payment-info:
         price:
           mode: fixed
@@ -836,8 +854,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/visibility_vs_competitor:
     post:
       operationId: visibility_vs_competitor
@@ -896,8 +912,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
   /api/agent/visibility_fix_pack:
     post:
       operationId: visibility_fix_pack
@@ -968,59 +982,6 @@ paths:
                 - capability
         '402':
           description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
-  /api/agent/generate_skill:
-    post:
-      operationId: generate_skill
-      summary: Generate a ready-to-run SKILL.md fix file that Claude Code and other AI coding…
-      tags:
-      - AI Visibility
-      description: Generate a ready-to-run SKILL.md fix file that Claude Code and other AI coding agents execute to apply every fix automatically. Pay 0.45 USDC via x402 on Base (eip155:8453).
-      x-payment-info:
-        price:
-          mode: fixed
-          currency: USD
-          amount: '0.450000'
-        protocols:
-        - x402: {}
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url:
-                  type: string
-                  format: uri
-                  minLength: 1
-                  description: Full URL of the website to analyze, e.g. https://example.com
-              required:
-              - url
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  capability:
-                    type: string
-                    description: Capability that was executed
-                  url:
-                    type: string
-                    description: Analyzed site URL
-                  payment:
-                    type: object
-                    description: Payment settlement info
-                required:
-                - capability
-        '402':
-          description: Payment Required
-    servers:
-    - url: https://api.getaiscan.app
 components:
   securitySchemes:
     x402:
@@ -1028,6 +989,3 @@ components:
       in: header
       name: PAYMENT-SIGNATURE
       description: 'x402 V2 payment: signed payload or Base USDC tx hash'
-x-refined-from:
-- getaiscan-app-openapi-apex-5.9.0.json
-- getaiscan-app-openapi.json
