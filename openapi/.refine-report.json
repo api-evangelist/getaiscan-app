@@ -2,18 +2,22 @@
   "provider": "getaiscan-app",
   "sources": [
     "_original/getaiscan-app-agent.json",
-    "_original/getaiscan-app-openapi.json"
+    "_original/getaiscan-app-openapi.json",
+    "well-known/getaiscan-app-agent.json"
   ],
   "outputs": [
     "getaiscan-app-agent-api-openapi.yml",
     "getaiscan-app-ai-visibility-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "archived well-known/getaiscan-app-agent.json"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
     "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "discovered stray spec: well-known/getaiscan-app-agent.json",
     "getaiscan-app-agent.json: upgraded openapi https://api.getaiscan.app/openapi.json -> OpenAPI 3.2.0",
     "getaiscan-app-agent.json: tagged paths POST /api/agent/scan -> Agent",
     "getaiscan-app-agent.json: declared missing tag: Agent",
@@ -21,7 +25,10 @@
     "getaiscan-app-openapi.json: tagged paths GET /api/agent/index -> Agent",
     "getaiscan-app-openapi.json: declared missing tag: AI Visibility",
     "getaiscan-app-openapi.json: declared missing tag: Agent",
-    "tag 'Agent' spans 2 source specs (getaiscan-app-agent.json, getaiscan-app-openapi.json): per-path servers applied",
+    "getaiscan-app-agent.json: upgraded openapi https://api.getaiscan.app/openapi.json -> OpenAPI 3.2.0",
+    "getaiscan-app-agent.json: tagged paths POST /api/agent/scan -> Agent",
+    "getaiscan-app-agent.json: declared missing tag: Agent",
+    "tag 'Agent' spans 3 source specs (getaiscan-app-agent.json, getaiscan-app-openapi.json, getaiscan-app-agent.json): per-path servers applied",
     "apis.yml register: already-registered"
   ],
   "skipped": [

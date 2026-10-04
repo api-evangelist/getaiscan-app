@@ -4,7 +4,7 @@ info:
   x-refined-note:
   - x-guidance differs across the merged source definitions and was not carried
   version: '1.0'
-  description: 'Operations tagged Agent across 2 of this provider''s published API definitions: getaiscan-app-agent.json, getaiscan-app-openapi.json. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Agent across 3 of this provider''s published API definitions: getaiscan-app-agent.json, getaiscan-app-openapi.json, getaiscan-app-agent.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.getaiscan.app
   description: AIScan API
@@ -111,6 +111,7 @@ components:
 x-refined-from:
 - getaiscan-app-agent.json
 - getaiscan-app-openapi.json
+- getaiscan-app-agent.json
 x-ai-agent:
   name: AIScan AI Visibility Scanner
   description: Scan websites for AI visibility including MCP Readiness
