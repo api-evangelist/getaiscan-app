@@ -79,6 +79,8 @@ apis:
   humanURL: https://getaiscan.app/
   baseURL: https://api.getaiscan.app
   tags:
+  - Agents
+  tags_raw:
   - Agent
   properties:
   - type: OpenAPI
