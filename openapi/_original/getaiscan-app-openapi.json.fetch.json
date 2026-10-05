@@ -1,0 +1,12 @@
+{
+ "url": "https://api.getaiscan.app/openapi.json",
+ "requested_url": "https://api.getaiscan.app/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 24365,
+ "sha256": "c59bd7d14737ab76f9e0eb92928da71bb187d1eda20613c734153417e5b74f20",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
