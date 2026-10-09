@@ -1,0 +1,39 @@
+# Front Door AI Index — getaiscan-app — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: getaiscan-app
+  lexicon_version: '1.0'
+  probed_at: '2026-09-25'
+  host: getaiscan.app
+  final_host: getaiscan.app
+  ownership: own
+  owner: getaiscan-app
+  shares_host_with: null
+  inherited_from: null
+  alias_of: null
+  verdict: scored
+  score: 149
+  band: 6
+  band_label: dominant
+  host_score: 149
+  density: 56.59
+  words: 2633
+  tiers:
+    agentic: 52
+    core: 85
+    model: 12
+  ambiguous: 33
+  top_terms:
+    AI: 84
+    agent: 33
+    MCP: 21
+    AI agent: 10
+    llms.txt: 8
+    prompts: 7
+    Claude: 6
+    ChatGPT: 5
+    AI assistant: 2
+    autonomous agent: 2
+    LLMs: 1
+    OpenAI: 1
