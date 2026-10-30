@@ -64,5 +64,120 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-AIScan is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
-- https://getaiscan.app/
+AIScan is an AI-visibility auditing service at getaiscan.app that scans any website in about 60 seconds and returns four 0-100 scores — AEO (AI search visibility), GEO (citation readiness), Agent Readiness and MCP Readiness — from 80+ checks, plus a Brand Visibility measurement of how often AI assistants actually name a brand across 30 realistic niche prompts. Humans buy a full report on the site for 60 USDC; software agents buy 19 individual capabilities pay-per-call (0.06-3.50 USDC) through the x402 protocol on Base (eip155:8453) with no API key and no account, via a 20-operation OpenAPI 3.1.0 REST contract served from api.getaiscan.app, an A2A 0.3.0 agent card with 18 skills at /.well-known/agent-card.json, an ai-plugin.json manifest and an MCP discovery descriptor at /.well-known/mcp.json. Every paid route answers an unpaid call with a real HTTP 402 x402 V2 challenge; the capability catalog at GET /api/agent/index is free.
+
+**Areas:** AI Visibility · Website Auditing · SEO · Answer Engine Optimization · Generative Engine Optimization · Agents · Agentic Commerce · A2A · MCP · x402 · Agent-Native
+
+## AIScan on APIs.io
+
+Everything profiled for AIScan is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/getaiscan-app/](https://apis.io/providers/getaiscan-app/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [AIScan A2A Agent](https://apis.io/apis/getaiscan-app/aiscan-a2a-agent/) — Agent2Agent (A2A) protocol surface: an agent card served from https://getaiscan.app/.well-known/agent-card.json (protocolVersion 0.3.0, JSONRPC transport,…
+- [AIScan Agent API](https://apis.io/apis/getaiscan-app/getaiscan-app-agent-api/) — The Agent API from AIScan — 2 operation(s) for agent.
+- [AIScan AI Visibility API](https://apis.io/apis/getaiscan-app/getaiscan-app-ai-visibility-api/) — The AI Visibility API from AIScan — 19 operation(s) for ai visibility.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [getaiscan-app-mcp.yml](https://apis.io/servers/getaiscan-app/getaiscan-app-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Getaiscan App Agentic Access](https://apis.io/agentic-access/getaiscan-app/getaiscan-app-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Getaiscan App Openapi Overlay](https://apis.io/overlays/getaiscan-app/getaiscan-app-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Getaiscan App Authentication](https://apis.io/security/getaiscan-app/getaiscan-app-authentication/)
+- [Getaiscan App Domain Security](https://apis.io/security/getaiscan-app/getaiscan-app-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Getaiscan App Plans Pricing](https://apis.io/plans/getaiscan-app/getaiscan-app-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Getaiscan App Rate Limits](https://apis.io/rate-limits/getaiscan-app/getaiscan-app-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://getaiscan.app/)
+- [Documentation](https://getaiscan.app/llms.txt)
+- [API reference](https://api.getaiscan.app/openapi.json)
+- [Pricing](https://api.getaiscan.app/api/agent/index)
+- [Blog](https://getaiscan.app/blog/)
+
+## API Evangelist rating
+
+**Kin Score 36.7** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 78.6 |
+| Contract quality | 48.5 |
+| Contract governance | 18.2 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 32.7 |
+| Access clarity | 42.1 |
+
+**Agent readiness 32.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | conformant |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/getaiscan-app/](https://apis.io/providers/getaiscan-app/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for AIScan: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/getaiscan-app/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
